@@ -1,0 +1,11 @@
+/.externalToolBuilders/
+/.gradle/
+/.idea/
+/.settings/
+/build/
+/out/
+/run/
+/.classpath
+/.project
+/atlassian-ide-plugin.xml
+/*.iml
