@@ -25,9 +25,15 @@ license {
 repositories {
     mavenLocal()
     mavenCentral()
+    maven {
+        name 'spongepowered'
+        url 'https://repo.spongepowered.org/maven/'
+    }
 }
 
 dependencies {
+    compile 'net.kyori:lunar:1.0.1'
+    compile group: 'org.spongepowered', name: 'spongeapi', version: sponge
     testCompile 'junit:junit:4.12'
 }
 
