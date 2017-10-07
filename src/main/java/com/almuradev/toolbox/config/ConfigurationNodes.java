@@ -28,6 +28,7 @@ import ninja.leaping.configurate.ConfigurationNode;
 
 import java.util.function.Consumer;
 import java.util.function.DoubleConsumer;
+import java.util.function.IntConsumer;
 
 /**
  * A collection of utilities for working with configuration nodes.
@@ -70,6 +71,19 @@ public interface ConfigurationNodes {
     static void whenRealFloat(final ConfigurationNode node, final DoubleConsumer consumer) {
         if (!node.isVirtual()) {
             consumer.accept(node.getFloat());
+        }
+    }
+
+    /**
+     * Provide a consumer with the {@link ConfigurationNode#getInt() int value} of
+     * a configuration node if it is not {@link ConfigurationNode#isVirtual() virtual}.
+     *
+     * @param node the node
+     * @param consumer the consumer
+     */
+    static void whenRealInt(final ConfigurationNode node, final IntConsumer consumer) {
+        if (!node.isVirtual()) {
+            consumer.accept(node.getInt());
         }
     }
 
