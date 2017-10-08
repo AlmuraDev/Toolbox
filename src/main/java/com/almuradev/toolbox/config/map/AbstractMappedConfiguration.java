@@ -83,12 +83,16 @@ public abstract class AbstractMappedConfiguration<T> implements MappedConfigurat
 
     protected void construct() {
         final Path parent = this.path.getParent();
-        if (Files.notExists(parent)) {
+        boolean create = Files.notExists(parent);
+        if (create) {
             try {
                 Files.createDirectories(parent);
             } catch (final IOException e) {
                 throw Exceptions.rethrow(e);
             }
+        }
+        create |= Files.notExists(this.path);
+        if (create) {
             this.save();
         }
         this.load();
