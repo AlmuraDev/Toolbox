@@ -45,6 +45,17 @@ public interface ConfigurationNodes {
             consumer.accept(node);
         }
     }
+    /**
+     * Provide a consumer with the configuration node if it is {@link ConfigurationNode#isVirtual() virtual}.
+     *
+     * @param node the node
+     * @param consumer the consumer
+     */
+    static void whenNotReal(final ConfigurationNode node, final Consumer<ConfigurationNode> consumer) {
+        if (node.isVirtual()) {
+            consumer.accept(node);
+        }
+    }
 
     /**
      * Provide a consumer with the {@link ConfigurationNode#getBoolean() boolean value} of
