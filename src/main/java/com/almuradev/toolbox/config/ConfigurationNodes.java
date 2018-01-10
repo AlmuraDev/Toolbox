@@ -34,6 +34,17 @@ import java.util.function.IntConsumer;
  * A collection of utilities for working with configuration nodes.
  */
 public interface ConfigurationNodes {
+    /**
+     * Provide a consumer with the configuration node if it is not {@link ConfigurationNode#isVirtual() virtual}.
+     *
+     * @param node the node
+     * @param consumer the consumer
+     */
+    static void whenReal(final ConfigurationNode node, final Consumer<ConfigurationNode> consumer) {
+        if (!node.isVirtual()) {
+            consumer.accept(node);
+        }
+    }
 
     /**
      * Provide a consumer with the {@link ConfigurationNode#getBoolean() boolean value} of
