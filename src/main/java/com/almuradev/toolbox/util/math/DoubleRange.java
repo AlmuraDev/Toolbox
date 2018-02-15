@@ -24,6 +24,7 @@
 package com.almuradev.toolbox.util.math;
 
 import com.almuradev.toolbox.config.ConfigurationNodeDeserializer;
+import com.flowpowered.math.GenericMath;
 import com.google.common.base.MoreObjects;
 
 import java.util.Map;
@@ -133,6 +134,16 @@ public final class DoubleRange {
         } else {
             return next * (this.max - this.min) + this.min;
         }
+    }
+
+    /**
+     * Gets a floored random value within this range.
+     *
+     * @param random the random
+     * @return the floored value
+     */
+    public int flooredRandom(final Random random) {
+        return GenericMath.floor(this.random(random));
     }
 
     @Override
