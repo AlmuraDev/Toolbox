@@ -43,10 +43,14 @@ public final class IntRange {
             return Optional.empty();
         }
         if (config.getValue() instanceof Map) {
-            return Optional.of(range(
-                config.getNode("min").getInt(),
-                config.getNode("max").getInt()
-            ));
+            if (!config.getNode("min").isVirtual()) {
+                return Optional.of(range(
+                    config.getNode("min").getInt(),
+                    config.getNode("max").getInt()
+                ));
+            } else if (!config.getNode("value").isVirtual()) {
+                return Optional.of(fixed(config.getNode("value").getInt()));
+            }
         } else if (config.getValue() instanceof Number) {
             return Optional.of(fixed(config.getInt()));
         }

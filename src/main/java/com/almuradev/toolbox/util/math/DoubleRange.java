@@ -44,10 +44,14 @@ public final class DoubleRange {
             return Optional.empty();
         }
         if (config.getValue() instanceof Map) {
-            return Optional.of(range(
-                config.getNode("min").getDouble(),
-                config.getNode("max").getDouble()
-            ));
+            if (!config.getNode("min").isVirtual()) {
+                return Optional.of(range(
+                    config.getNode("min").getDouble(),
+                    config.getNode("max").getDouble()
+                ));
+            } else if (!config.getNode("value").isVirtual()) {
+                return Optional.of(fixed(config.getNode("value").getDouble()));
+            }
         } else if (config.getValue() instanceof Number) {
             return Optional.of(fixed(config.getDouble()));
         }
