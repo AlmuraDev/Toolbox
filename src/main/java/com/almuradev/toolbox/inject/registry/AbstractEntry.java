@@ -21,17 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.almuradev.toolbox.inject;
+package com.almuradev.toolbox.inject.registry;
 
-import com.almuradev.toolbox.inject.command.CommandInstaller;
-import com.almuradev.toolbox.inject.network.packet.PacketInstaller;
-import net.kyori.violet.AbstractModule;
+import com.google.inject.Injector;
+import org.spongepowered.api.GameRegistry;
 
-public final class ToolboxModule extends AbstractModule implements ToolboxBinder {
-    @Override
-    protected void configure() {
-        this.facet()
-            .add(CommandInstaller.class)
-            .add(PacketInstaller.class);
-    }
+/**
+ * An abstract registry binder entry.
+ */
+abstract class AbstractEntry {
+    /**
+     * Install this entry into the registry.
+     *
+     * @param injector the injector
+     * @param registry the registry
+     */
+    abstract void install(final Injector injector, final GameRegistry registry);
 }

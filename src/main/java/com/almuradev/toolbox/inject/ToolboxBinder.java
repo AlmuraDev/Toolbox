@@ -25,6 +25,7 @@ package com.almuradev.toolbox.inject;
 
 import com.almuradev.toolbox.inject.command.CommandBinder;
 import com.almuradev.toolbox.inject.network.packet.indexed.IndexedPacketBinder;
+import com.almuradev.toolbox.inject.registry.RegistryBinder;
 import net.kyori.membrane.facet.Facet;
 import net.kyori.membrane.facet.FacetBinder;
 import net.kyori.violet.ForwardingBinder;
@@ -58,6 +59,15 @@ public interface ToolboxBinder extends ForwardingBinder {
      */
     default IndexedPacketBinder indexedPacket() {
         return IndexedPacketBinder.create(this.binder());
+    }
+
+    /**
+     * Creates a registry binder.
+     *
+     * @return a registry binder
+     */
+    default RegistryBinder registry() {
+        return RegistryBinder.create(this.binder());
     }
 
     /**
