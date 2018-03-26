@@ -21,33 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.almuradev.toolbox.config.processor;
+package com.almuradev.toolbox.inject.command;
 
-import ninja.leaping.configurate.ConfigurationNode;
+import com.google.inject.Binder;
+import com.google.inject.multibindings.Multibinder;
+import org.spongepowered.api.command.CommandCallable;
 
-/**
- * A configuration node processor.
- *
- * @param <C> the context type
- */
-@Deprecated
-@FunctionalInterface
-public interface ConfigProcessor<C> {
+public final class CommandBinder {
+    private final Multibinder<RootCommandEntry> root;
 
-    /**
-     * Process a configuration node and context.
-     *
-     * @param config the configuration node
-     * @param context the context
-     */
-    void process(final ConfigurationNode config, final C context);
+    public static CommandBinder create(final Binder binder) {
+        return new CommandBinder(binder);
+    }
 
-    /**
-     * Post-process a configuration node and context.
-     *
-     * @param config the configuration node
-     * @param context the context
-     */
-    default void postProcess(final ConfigurationNode config, final C context) {
+    private CommandBinder(final Binder binder) {
+        this.root = Multibinder.newSetBinder(binder, RootCommandEntry.class);
+    }
+
+    public CommandBinder root(final CommandCallable callable, final String... aliases) {
+        this.root.addBinding().toInstance(new RootCommandEntry(callable, aliases));
+        return this;
     }
 }

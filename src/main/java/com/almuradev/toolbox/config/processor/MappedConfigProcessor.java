@@ -34,6 +34,7 @@ import java.util.Map;
  * @param <C> the context type
  * @param <T> the tag type
  */
+@Deprecated
 public interface MappedConfigProcessor<C, T extends ConfigTag> extends AbstractTaggedConfigProcessor<C, T>, ConfigProcessor<C> {
 
     /**

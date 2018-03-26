@@ -21,33 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.almuradev.toolbox.config.processor;
+package com.almuradev.toolbox.inject.command;
 
-import ninja.leaping.configurate.ConfigurationNode;
+import org.spongepowered.api.command.CommandCallable;
 
-/**
- * A configuration node processor.
- *
- * @param <C> the context type
- */
-@Deprecated
-@FunctionalInterface
-public interface ConfigProcessor<C> {
-
-    /**
-     * Process a configuration node and context.
-     *
-     * @param config the configuration node
-     * @param context the context
-     */
-    void process(final ConfigurationNode config, final C context);
-
-    /**
-     * Post-process a configuration node and context.
-     *
-     * @param config the configuration node
-     * @param context the context
-     */
-    default void postProcess(final ConfigurationNode config, final C context) {
+final class RootCommandEntry extends CommandEntry {
+    RootCommandEntry(final CommandCallable callable, final String[] aliases) {
+        super(callable, aliases);
     }
 }

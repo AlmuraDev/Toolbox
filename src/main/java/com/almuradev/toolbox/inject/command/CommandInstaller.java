@@ -21,33 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.almuradev.toolbox.config.processor;
+package com.almuradev.toolbox.inject.command;
 
-import ninja.leaping.configurate.ConfigurationNode;
+import net.kyori.membrane.facet.Enableable;
+import org.spongepowered.api.command.CommandManager;
+import org.spongepowered.api.plugin.PluginContainer;
 
-/**
- * A configuration node processor.
- *
- * @param <C> the context type
- */
-@Deprecated
-@FunctionalInterface
-public interface ConfigProcessor<C> {
+import java.util.Set;
 
-    /**
-     * Process a configuration node and context.
-     *
-     * @param config the configuration node
-     * @param context the context
-     */
-    void process(final ConfigurationNode config, final C context);
+import javax.inject.Inject;
 
-    /**
-     * Post-process a configuration node and context.
-     *
-     * @param config the configuration node
-     * @param context the context
-     */
-    default void postProcess(final ConfigurationNode config, final C context) {
+public final class CommandInstaller implements Enableable {
+    private final PluginContainer container;
+    private final CommandManager manager;
+    private final Set<RootCommandEntry> root;
+
+    @Inject
+    private CommandInstaller(final PluginContainer container, final CommandManager manager, final Set<RootCommandEntry> root) {
+        this.container = container;
+        this.manager = manager;
+        this.root = root;
+    }
+
+    @Override
+    public void enable() {
+        this.registerRoot();
+    }
+
+    private void registerRoot() {
+        this.root.forEach((entry) -> this.manager.register(this.container, entry.callable, entry.aliases));
+    }
+
+    @Override
+    public void disable() {
+        // TODO(kashike): removal?
     }
 }

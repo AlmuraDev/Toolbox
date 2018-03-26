@@ -21,33 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.almuradev.toolbox.config.processor;
+package com.almuradev.toolbox.inject.network.packet.indexed;
 
-import ninja.leaping.configurate.ConfigurationNode;
+import com.google.inject.BindingAnnotation;
 
-/**
- * A configuration node processor.
- *
- * @param <C> the context type
- */
-@Deprecated
-@FunctionalInterface
-public interface ConfigProcessor<C> {
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-    /**
-     * Process a configuration node and context.
-     *
-     * @param config the configuration node
-     * @param context the context
-     */
-    void process(final ConfigurationNode config, final C context);
-
-    /**
-     * Post-process a configuration node and context.
-     *
-     * @param config the configuration node
-     * @param context the context
-     */
-    default void postProcess(final ConfigurationNode config, final C context) {
-    }
+@BindingAnnotation
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ForIndexedPacketBinder {
 }

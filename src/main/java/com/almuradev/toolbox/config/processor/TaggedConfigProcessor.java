@@ -32,6 +32,7 @@ import ninja.leaping.configurate.ConfigurationNode;
  * @param <C> the context type
  * @param <T> the tag type
  */
+@Deprecated
 public interface TaggedConfigProcessor<C, T extends ConfigTag> extends AbstractTaggedConfigProcessor<C, T>, ConfigProcessor<C> {
 
     @Override

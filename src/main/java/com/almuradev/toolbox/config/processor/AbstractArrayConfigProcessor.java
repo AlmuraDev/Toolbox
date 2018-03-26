@@ -32,6 +32,7 @@ import java.util.List;
  *
  * @param <C> the context type
  */
+@Deprecated
 public interface AbstractArrayConfigProcessor<C> {
 
     default void processChildren(final ConfigurationNode config, final C context) {

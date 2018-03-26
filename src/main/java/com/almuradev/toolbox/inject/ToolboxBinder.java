@@ -21,61 +21,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.almuradev.toolbox.config.processor;
+package com.almuradev.toolbox.inject;
 
-import com.almuradev.toolbox.config.tag.ConfigTag;
-import ninja.leaping.configurate.ConfigurationNode;
+import com.almuradev.toolbox.inject.command.CommandBinder;
+import com.almuradev.toolbox.inject.network.packet.indexed.IndexedPacketBinder;
+import net.kyori.membrane.facet.Facet;
+import net.kyori.membrane.facet.FacetBinder;
+import net.kyori.violet.ForwardingBinder;
+import org.spongepowered.api.Platform;
+import org.spongepowered.api.Sponge;
 
-/**
- * An abstract tagged configuration node processor.
- *
- * @param <C> the context type
- * @param <T> the tag type
- */
-@Deprecated
-@FunctionalInterface
-public interface AbstractTaggedConfigProcessor<C, T extends ConfigTag> {
-
+public interface ToolboxBinder extends ForwardingBinder {
     /**
-     * Gets the tag this processor processes.
+     * Creates a facet binder.
      *
-     * @return the tag
+     * @return a facet binder
+     * @see Facet
      */
-    T tag();
-
-    /**
-     * Tests if this tag is required.
-     *
-     * @return {@code true} if this tag is required, {@code false} otherwise
-     */
-    default boolean required() {
-        return false;
+    default FacetBinder facet() {
+        return FacetBinder.create(this.binder());
     }
 
     /**
-     * Throws an exception when a required tag is missing.
+     * Creates a command binder.
+     *
+     * @return a command binder
      */
-    default void missingRequired() {
-        throw new IllegalArgumentException("Missing required tag '" + this.tag() + '\'');
+    default CommandBinder command() {
+        return CommandBinder.create(this.binder());
     }
 
     /**
-     * Process a configuration node and context.
+     * Creates an indexed packet binder.
      *
-     * @param config the configuration node
-     * @param context the context
+     * @return an indexed packet binder
      */
-    default void processRoot(final ConfigurationNode config, final C context) {
-        // NOOP
+    default IndexedPacketBinder indexedPacket() {
+        return IndexedPacketBinder.create(this.binder());
     }
 
     /**
-     * Post-process a configuration node and context.
+     * Run a runnable when on a specific platform type.
      *
-     * @param config the configuration node
-     * @param context the context
+     * @param type the platform type
+     * @param runnable the runnable
      */
-    default void postProcessRoot(final ConfigurationNode config, final C context) {
-        // NOOP
+    default void on(final Platform.Type type, final Runnable runnable) {
+        if (Sponge.getPlatform().getType() == type) {
+            runnable.run();
+        }
     }
 }

@@ -21,33 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.almuradev.toolbox.config.processor;
+package com.almuradev.toolbox.inject.network.packet.indexed;
 
-import ninja.leaping.configurate.ConfigurationNode;
+import org.spongepowered.api.Platform;
+import org.spongepowered.api.network.Message;
+import org.spongepowered.api.network.MessageHandler;
 
 /**
- * A configuration node processor.
+ * A binding entry.
  *
- * @param <C> the context type
+ * @param <M> the packet type
  */
-@Deprecated
-@FunctionalInterface
-public interface ConfigProcessor<C> {
-
+public interface IndexedPacketEntry<M extends Message> {
     /**
-     * Process a configuration node and context.
+     * Sets the packet handler.
      *
-     * @param config the configuration node
-     * @param context the context
+     * @param handler the handler
+     * @param side the side
      */
-    void process(final ConfigurationNode config, final C context);
-
-    /**
-     * Post-process a configuration node and context.
-     *
-     * @param config the configuration node
-     * @param context the context
-     */
-    default void postProcess(final ConfigurationNode config, final C context) {
+    default void handler(final Class<? extends MessageHandler<M>> handler, final Platform.Type side) {
+        this.handler(handler, side, false);
     }
+
+    /**
+     * Sets the packet handler.
+     *
+     * @param handler the handler
+     * @param side the side
+     * @param strictSide if the side is strict
+     */
+    void handler(final Class<? extends MessageHandler<M>> handler, final Platform.Type side, final boolean strictSide);
 }

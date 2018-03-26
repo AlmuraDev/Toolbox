@@ -30,6 +30,7 @@ import ninja.leaping.configurate.ConfigurationNode;
  *
  * @param <C> the context type
  */
+@Deprecated
 public interface ArrayConfigProcessor<C> extends AbstractArrayConfigProcessor<C>, ConfigProcessor<C> {
 
     @Override
