@@ -27,7 +27,10 @@ import com.google.inject.Binder;
 import com.google.inject.multibindings.Multibinder;
 import org.spongepowered.api.command.CommandCallable;
 
+import javax.inject.Provider;
+
 public final class CommandBinder {
+    private final Binder binder;
     private final Multibinder<RootCommandEntry> root;
 
     public static CommandBinder create(final Binder binder) {
@@ -35,10 +38,21 @@ public final class CommandBinder {
     }
 
     private CommandBinder(final Binder binder) {
+        this.binder = binder;
         this.root = Multibinder.newSetBinder(binder, RootCommandEntry.class);
     }
 
     public CommandBinder root(final CommandCallable callable, final String... aliases) {
+        this.root(() -> callable, aliases);
+        return this;
+    }
+
+    public CommandBinder root(final Class<? extends CommandCallable> callable, final String... aliases) {
+        this.root(this.binder.getProvider(callable), aliases);
+        return this;
+    }
+
+    public CommandBinder root(final Provider<? extends CommandCallable> callable, final String... aliases) {
         this.root.addBinding().toInstance(new RootCommandEntry(callable, aliases));
         return this;
     }

@@ -49,7 +49,7 @@ public final class CommandInstaller implements Enableable {
     }
 
     private void registerRoot() {
-        this.root.forEach((entry) -> this.manager.register(this.container, entry.callable, entry.aliases));
+        this.root.forEach((entry) -> this.manager.register(this.container, entry.callable.get(), entry.aliases));
     }
 
     @Override

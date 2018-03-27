@@ -25,8 +25,10 @@ package com.almuradev.toolbox.inject.command;
 
 import org.spongepowered.api.command.CommandCallable;
 
+import javax.inject.Provider;
+
 final class RootCommandEntry extends CommandEntry {
-    RootCommandEntry(final CommandCallable callable, final String[] aliases) {
+    RootCommandEntry(final Provider<? extends CommandCallable> callable, final String[] aliases) {
         super(callable, aliases);
     }
 }
