@@ -30,30 +30,29 @@ import org.spongepowered.api.command.CommandCallable;
 import javax.inject.Provider;
 
 public final class CommandBinder {
-    private final Binder binder;
-    private final Multibinder<RootCommandEntry> root;
+    private final Multibinder<CommandCallable> root;
 
-    public static CommandBinder create(final Binder binder) {
-        return new CommandBinder(binder);
+    public CommandBinder(final Binder binder) {
+        this.root = Multibinder.newSetBinder(binder, CommandCallable.class, BoundRootCommand.class);
     }
 
-    private CommandBinder(final Binder binder) {
-        this.binder = binder;
-        this.root = Multibinder.newSetBinder(binder, RootCommandEntry.class);
-    }
-
-    public CommandBinder root(final CommandCallable callable, final String... aliases) {
-        this.root(() -> callable, aliases);
+    public CommandBinder root(final CommandCallable callable) {
+        this.root.addBinding().toInstance(callable);
         return this;
     }
 
-    public CommandBinder root(final Class<? extends CommandCallable> callable, final String... aliases) {
-        this.root(this.binder.getProvider(callable), aliases);
+    public CommandBinder root(final Class<? extends CommandCallable> callable) {
+        this.root.addBinding().to(callable);
         return this;
     }
 
-    public CommandBinder root(final Provider<? extends CommandCallable> callable, final String... aliases) {
-        this.root.addBinding().toInstance(new RootCommandEntry(callable, aliases));
+    public CommandBinder rootProvider(final Class<? extends Provider<? extends CommandCallable>> callable) {
+        this.root.addBinding().toProvider(callable);
+        return this;
+    }
+
+    public CommandBinder rootProvider(final Provider<? extends CommandCallable> callable) {
+        this.root.addBinding().toProvider(callable);
         return this;
     }
 }

@@ -24,6 +24,7 @@
 package com.almuradev.toolbox.inject.command;
 
 import net.kyori.membrane.facet.Enableable;
+import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandManager;
 import org.spongepowered.api.plugin.PluginContainer;
 
@@ -31,13 +32,15 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import static java.util.Objects.requireNonNull;
+
 public final class CommandInstaller implements Enableable {
     private final PluginContainer container;
     private final CommandManager manager;
-    private final Set<RootCommandEntry> root;
+    private final Set<CommandCallable> root;
 
     @Inject
-    private CommandInstaller(final PluginContainer container, final CommandManager manager, final Set<RootCommandEntry> root) {
+    private CommandInstaller(final PluginContainer container, final CommandManager manager, @BoundRootCommand final Set<CommandCallable> root) {
         this.container = container;
         this.manager = manager;
         this.root = root;
@@ -49,7 +52,7 @@ public final class CommandInstaller implements Enableable {
     }
 
     private void registerRoot() {
-        this.root.forEach((entry) -> this.manager.register(this.container, entry.callable.get(), entry.aliases));
+        this.root.forEach((entry) -> this.manager.register(this.container, entry, requireNonNull(entry.getClass().getAnnotation(BindRootCommand.class), "missing @BindRootCommand").value()));
     }
 
     @Override

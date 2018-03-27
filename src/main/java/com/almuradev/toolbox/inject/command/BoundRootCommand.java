@@ -23,16 +23,12 @@
  */
 package com.almuradev.toolbox.inject.command;
 
-import org.spongepowered.api.command.CommandCallable;
+import com.google.inject.BindingAnnotation;
 
-import javax.inject.Provider;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-public abstract class CommandEntry {
-    protected final Provider<? extends CommandCallable> callable;
-    protected final String[] aliases;
-
-    CommandEntry(final Provider<? extends CommandCallable> callable, final String[] aliases) {
-        this.callable = callable;
-        this.aliases = aliases;
-    }
+@BindingAnnotation
+@Retention(RetentionPolicy.RUNTIME)
+@interface BoundRootCommand {
 }

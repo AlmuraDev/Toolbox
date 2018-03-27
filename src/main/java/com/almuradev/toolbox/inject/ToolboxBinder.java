@@ -49,7 +49,7 @@ public interface ToolboxBinder extends ForwardingBinder {
      * @return a command binder
      */
     default CommandBinder command() {
-        return CommandBinder.create(this.binder());
+        return new CommandBinder(this.binder());
     }
 
     /**
