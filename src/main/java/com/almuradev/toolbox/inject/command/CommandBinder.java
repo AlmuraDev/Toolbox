@@ -30,29 +30,32 @@ import org.spongepowered.api.command.CommandCallable;
 import javax.inject.Provider;
 
 public final class CommandBinder {
-    private final Multibinder<CommandCallable> root;
+    private final Binder binder;
+    private final Multibinder<CommandEntry> root;
 
     public CommandBinder(final Binder binder) {
-        this.root = Multibinder.newSetBinder(binder, CommandCallable.class, BoundRootCommand.class);
+        this.binder = binder;
+        this.root = Multibinder.newSetBinder(binder, CommandEntry.class, BoundRootCommand.class);
     }
 
-    public CommandBinder root(final CommandCallable callable) {
-        this.root.addBinding().toInstance(callable);
+    public CommandBinder root(final CommandCallable callable, final String... aliases) {
+        this.root.addBinding().toInstance(new CommandEntry(() -> callable, aliases));
         return this;
     }
 
-    public CommandBinder root(final Class<? extends CommandCallable> callable) {
-        this.root.addBinding().to(callable);
+    public CommandBinder root(final Class<? extends CommandCallable> callable, final String... aliases) {
+        this.root.addBinding().toInstance(new CommandEntry(this.binder.getProvider(callable), aliases));
         return this;
     }
 
-    public CommandBinder rootProvider(final Class<? extends Provider<? extends CommandCallable>> callable) {
-        this.root.addBinding().toProvider(callable);
+    public CommandBinder rootProvider(final Class<? extends Provider<? extends CommandCallable>> callable, final String... aliases) {
+        final Provider<? extends Provider<? extends CommandCallable>> provider = this.binder.getProvider(callable);
+        this.root.addBinding().toInstance(new CommandEntry(() -> provider.get().get(), aliases));
         return this;
     }
 
-    public CommandBinder rootProvider(final Provider<? extends CommandCallable> callable) {
-        this.root.addBinding().toProvider(callable);
+    public CommandBinder rootProvider(final Provider<? extends CommandCallable> callable, final String... aliases) {
+        this.root.addBinding().toInstance(new CommandEntry(callable, aliases));
         return this;
     }
 }

@@ -23,40 +23,16 @@
  */
 package com.almuradev.toolbox.inject.command;
 
-import net.kyori.membrane.facet.Enableable;
 import org.spongepowered.api.command.CommandCallable;
-import org.spongepowered.api.command.CommandManager;
-import org.spongepowered.api.plugin.PluginContainer;
 
-import java.util.Set;
+import javax.inject.Provider;
 
-import javax.inject.Inject;
+public class CommandEntry {
+    final Provider<? extends CommandCallable> callable;
+    final String[] aliases;
 
-import static java.util.Objects.requireNonNull;
-
-public final class CommandInstaller implements Enableable {
-    private final PluginContainer container;
-    private final CommandManager manager;
-    private final Set<CommandEntry> root;
-
-    @Inject
-    private CommandInstaller(final PluginContainer container, final CommandManager manager, @BoundRootCommand final Set<CommandEntry> root) {
-        this.container = container;
-        this.manager = manager;
-        this.root = root;
-    }
-
-    @Override
-    public void enable() {
-        this.registerRoot();
-    }
-
-    private void registerRoot() {
-        this.root.forEach((entry) -> this.manager.register(this.container, entry.callable.get(), entry.aliases));
-    }
-
-    @Override
-    public void disable() {
-        // TODO(kashike): removal?
+    public CommandEntry(final Provider<? extends CommandCallable> callable, final String[] aliases) {
+        this.callable = callable;
+        this.aliases = aliases;
     }
 }
