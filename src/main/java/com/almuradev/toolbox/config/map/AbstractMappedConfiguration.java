@@ -47,7 +47,7 @@ public abstract class AbstractMappedConfiguration<T> implements MappedConfigurat
 
     protected final Class<T> type;
     protected final Path path;
-    private final ConfigurationLoader<? extends ConfigurationNode> loader;
+    protected final ConfigurationLoader<? extends ConfigurationNode> loader;
     private final ObjectMapper<T>.BoundInstance mapper;
     private ConfigurationNode root;
     private T config;
@@ -57,8 +57,12 @@ public abstract class AbstractMappedConfiguration<T> implements MappedConfigurat
         this.path = path;
         this.loader = this.createLoader();
         this.mapper = this.createMapper();
-        this.root = SimpleConfigurationNode.root(this.loader.getDefaultOptions());
+        this.root = this.createRoot();
         this.construct();
+    }
+
+    protected ConfigurationNode createRoot() {
+        return SimpleConfigurationNode.root(this.loader.getDefaultOptions());
     }
 
     /**
