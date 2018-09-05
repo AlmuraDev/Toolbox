@@ -32,9 +32,9 @@ repositories {
 }
 
 dependencies {
-    compile 'net.kyori:lunar:1.0.1'
-    compile 'net.kyori:membrane:1.0.5'
-    compile 'net.kyori:violet:1.0.0'
+    compile 'net.kyori:lunar:1.0.6'
+    compile 'net.kyori:membrane:1.0.6'
+    compile 'net.kyori:violet:1.1.0'
     compile group: 'org.spongepowered', name: 'spongeapi', version: sponge
     testCompile 'junit:junit:4.12'
 }
