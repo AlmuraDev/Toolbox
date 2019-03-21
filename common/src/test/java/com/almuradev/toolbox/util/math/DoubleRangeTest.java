@@ -22,10 +22,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject;
+package com.almuradev.toolbox.util.math;
 
-import com.almuradev.toolbox.inject.ToolboxBinder;
+import org.junit.Test;
 
-public interface ModToolboxBinder extends ToolboxBinder {
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+public class DoubleRangeTest {
+
+    @Test
+    public void testRangeContains() {
+        final DoubleRange range = DoubleRange.range(13.42d, 15.64d);
+        assertFalse(range.contains(13.41d));
+        assertTrue(range.contains(14d));
+        assertFalse(range.contains(15.65d));
+    }
+
+    @Test
+    public void testFixedContains() {
+        final DoubleRange range = DoubleRange.fixed(15.374d);
+        assertTrue(range.contains(15.374d));
+        assertFalse(range.contains(15d));
+    }
 }
