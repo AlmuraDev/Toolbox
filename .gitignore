@@ -3,6 +3,14 @@
 /.idea/
 /.settings/
 /build/
+/buildSrc/build/
+/buildSrc/.gradle/
+/common/build/
+/common/.gradle/
+/forge/build/
+/forge/.gradle/
+/sponge/build/
+/sponge/.gradle/
 /out/
 /run/
 /.classpath
