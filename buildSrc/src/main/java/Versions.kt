@@ -9,8 +9,8 @@ object Versions {
 
     object Kyori {
         const val lunar = "2.0.0-SNAPSHOT"
-        const val membrane = "1.1.0-SNAPSHOT"
-        const val violet = "2.0.0-SNAPSHOT"
+        const val membrane = "1.0.6"
+        const val violet = "1.2.0-SNAPSHOT"
     }
 
     object Flow {

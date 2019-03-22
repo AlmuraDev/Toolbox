@@ -27,16 +27,6 @@ allprojects {
         maven(Repos.sponge)
     }
 
-    dependencies {
-        compile(Deps.configurate)
-        compile(Deps.guice)
-        compile(Deps.junit)
-        compile(Deps.Flow.math)
-        compile(Deps.Kyori.lunar)
-        compile(Deps.Kyori.membrane)
-        compile(Deps.Kyori.violet)
-    }
-
     defaultTasks("licenseFormat", "build")
 
     license {
@@ -45,8 +35,20 @@ allprojects {
             this["organization"] = License.organization
             this["url"] = License.url
         }
-        header = rootProject.file("HEADER.txt")
+        header = rootProject.file("header.txt")
         newLine = false
+    }
+}
+
+subprojects {
+    dependencies {
+        compile(Deps.configurate)
+        compile(Deps.guice)
+        compile(Deps.junit)
+        compile(Deps.Flow.math)
+        compile(Deps.Kyori.lunar)
+        compile(Deps.Kyori.membrane)
+        compile(Deps.Kyori.violet)
     }
 }
 
