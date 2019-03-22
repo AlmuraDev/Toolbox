@@ -22,15 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject;
+package com.almuradev.toolbox.forge.inject.network;
 
-import com.almuradev.toolbox.forge.inject.network.PacketBinder;
-import com.almuradev.toolbox.forge.inject.network.indexed.IndexedPacketBinder;
-import com.almuradev.toolbox.inject.ToolboxBinder;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public interface ModToolboxBinder extends ToolboxBinder {
+import java.util.function.Consumer;
 
-    default PacketBinder indexedPacket() {
-        return new IndexedPacketBinder(this.binder());
-    }
+public interface PacketBinder {
+
+    <IN extends IMessage, OUT extends IMessage> PacketBinder bind(final Class<IN> inboundPacket, final Consumer<PacketEntry<IN, OUT>> consumer);
 }

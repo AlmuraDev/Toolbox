@@ -22,15 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject;
+package com.almuradev.toolbox.forge.inject.network;
 
-import com.almuradev.toolbox.forge.inject.network.PacketBinder;
-import com.almuradev.toolbox.forge.inject.network.indexed.IndexedPacketBinder;
-import com.almuradev.toolbox.inject.ToolboxBinder;
+import com.google.inject.Injector;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 
-public interface ModToolboxBinder extends ToolboxBinder {
+public interface PacketEntry<IN extends IMessage, OUT extends IMessage> {
 
-    default PacketBinder indexedPacket() {
-        return new IndexedPacketBinder(this.binder());
+    default void handler(final Class<? extends IMessageHandler<IN, OUT>> handler, final Side side) {
+        this.handler(handler, side, false);
     }
+
+    void handler(final Class<? extends IMessageHandler<IN, OUT>> handler, final Side side, final boolean strictSide);
+
+    void register(final Side side, final Injector injector, final SimpleNetworkWrapper network);
 }

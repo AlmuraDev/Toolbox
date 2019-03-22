@@ -22,15 +22,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject;
+package com.almuradev.toolbox.forge.inject.network.provider;
 
-import com.almuradev.toolbox.forge.inject.network.PacketBinder;
-import com.almuradev.toolbox.forge.inject.network.indexed.IndexedPacketBinder;
-import com.almuradev.toolbox.inject.ToolboxBinder;
+import com.almuradev.toolbox.forge.inject.ForgeInjectionPoint;
+import com.almuradev.toolbox.forge.inject.network.ChannelId;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
-public interface ModToolboxBinder extends ToolboxBinder {
+public final class SimpleNetworkWrapperProvider implements Provider<SimpleNetworkWrapper> {
 
-    default PacketBinder indexedPacket() {
-        return new IndexedPacketBinder(this.binder());
+    @Inject private Provider<ForgeInjectionPoint> point;
+
+    private SimpleNetworkWrapper network;
+
+    final String getChannel() {
+        return this.point.get().getAnnotation(ChannelId.class).value();
+    }
+
+    @Override
+    public SimpleNetworkWrapper get() {
+        if (this.network == null) {
+            this.network = NetworkRegistry.INSTANCE.newSimpleChannel(this.getChannel());
+        }
+
+        return this.network;
     }
 }

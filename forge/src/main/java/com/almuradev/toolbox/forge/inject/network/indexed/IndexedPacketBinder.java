@@ -22,15 +22,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject;
+package com.almuradev.toolbox.forge.inject.network.indexed;
 
 import com.almuradev.toolbox.forge.inject.network.PacketBinder;
-import com.almuradev.toolbox.forge.inject.network.indexed.IndexedPacketBinder;
-import com.almuradev.toolbox.inject.ToolboxBinder;
+import com.almuradev.toolbox.forge.inject.network.PacketEntry;
+import com.google.inject.Binder;
+import com.google.inject.TypeLiteral;
+import com.google.inject.multibindings.Multibinder;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public interface ModToolboxBinder extends ToolboxBinder {
+import java.util.function.Consumer;
 
-    default PacketBinder indexedPacket() {
-        return new IndexedPacketBinder(this.binder());
+import javax.annotation.Nonnull;
+
+public final class IndexedPacketBinder implements PacketBinder {
+
+    private final Multibinder<IndexedPacketEntry<? extends IMessage, ? extends IMessage>> binder;
+
+    public IndexedPacketBinder(@Nonnull final Binder binder) {
+        this.binder = Multibinder.newSetBinder(binder, new TypeLiteral<IndexedPacketEntry<? extends IMessage, ? extends IMessage>>() {});
+    }
+
+    @Override
+    public <IN extends IMessage, OUT extends IMessage> PacketBinder bind(final Class<IN> inboundPacket,
+        final Consumer<PacketEntry<IN, OUT>> consumer) {
+        final IndexedPacketEntry<IN, OUT> entry = new IndexedPacketEntry<>(inboundPacket);
+        consumer.accept(entry);
+        this.binder.addBinding().toInstance(entry);
+        return this;
     }
 }

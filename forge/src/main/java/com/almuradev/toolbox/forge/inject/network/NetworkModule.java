@@ -22,15 +22,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject;
+package com.almuradev.toolbox.forge.inject.network;
 
-import com.almuradev.toolbox.forge.inject.network.PacketBinder;
-import com.almuradev.toolbox.forge.inject.network.indexed.IndexedPacketBinder;
-import com.almuradev.toolbox.inject.ToolboxBinder;
+import com.almuradev.toolbox.forge.inject.network.provider.SimpleNetworkWrapperProvider;
+import net.kyori.violet.AbstractModule;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
-public interface ModToolboxBinder extends ToolboxBinder {
+public final class NetworkModule extends AbstractModule {
 
-    default PacketBinder indexedPacket() {
-        return new IndexedPacketBinder(this.binder());
+    @Override
+    public void configure() {
+        this.bind(SimpleNetworkWrapper.class).annotatedWith(ChannelId.class).toProvider(SimpleNetworkWrapperProvider.class);
     }
 }
