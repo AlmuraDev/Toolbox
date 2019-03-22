@@ -22,21 +22,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.sponge.inject.event;
+package com.almuradev.toolbox.event;
 
-import org.spongepowered.api.event.EventManager;
-import org.spongepowered.api.plugin.PluginContainer;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-@Singleton
-public final class SpongeWitnessRegistrar implements WitnessRegistrar {
-    @Inject private PluginContainer plugin;
-    @Inject private EventManager em;
-
-    @Override
-    public void register(final Witness witness) {
-        this.em.registerListeners(this.plugin, witness);
-    }
+public interface WitnessRegistrar {
+  void register(final Witness witness);
 }

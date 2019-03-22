@@ -22,48 +22,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.sponge.inject.event;
+package com.almuradev.toolbox.sponge.event;
 
-import net.kyori.membrane.facet.internal.Facets;
-import net.kyori.violet.AbstractModule;
+import com.almuradev.toolbox.event.Witness;
+import com.almuradev.toolbox.event.WitnessRegistrar;
 import org.spongepowered.api.event.EventManager;
-import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.game.state.GameStateEvent;
 import org.spongepowered.api.plugin.PluginContainer;
 
-import java.util.stream.Stream;
-
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-public final class WitnessModule extends AbstractModule {
-    @Inject private PluginContainer plugin;
-    @Inject private EventManager em;
-    @Inject private Witnesses witnesses;
-    @Inject private Facets facets;
+@Singleton
+public class SpongeWitnessRegistrar implements WitnessRegistrar {
+  private @Inject PluginContainer plugin;
+  private @Inject EventManager em;
 
-    @Override
-    protected void configure() {
-        this.requestInjection(this);
-    }
-
-    @Inject
-    private void earlyConfigure() {
-        this.em.registerListeners(this.plugin, this);
-        this.register(this.facets.of(Witness.class, Witness.predicate()));
-    }
-
-    @Listener
-    public void lifecycleConfigure(final GameStateEvent event) {
-        this.register(this.facets.of(Witness.Lifecycle.class, Witness.Lifecycle.predicate(event.getState())));
-    }
-
-    private void register(final Stream<? extends Witness> stream) {
-        stream.forEach(witness -> {
-            if (witness instanceof Witness.Impl) {
-                ((Witness.Impl) witness).subscribed = true;
-            }
-
-            this.witnesses.register(witness);
-        });
-    }
+  @Override
+  public void register(final Witness witness) {
+    this.em.registerListeners(this.plugin, witness);
+  }
 }

@@ -22,10 +22,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.sponge.inject.event;
+package com.almuradev.toolbox.event;
 
 import com.google.inject.Injector;
-import org.slf4j.Logger;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -39,11 +38,10 @@ import javax.inject.Singleton;
 @Singleton
 public final class Witnesses {
     private final Map<Class<? extends Annotation>, WitnessRegistrar> registars = new HashMap<>();
-    @Inject private Logger logger;
     @Inject private Injector injector;
 
     public void register(final Witness witness) {
-        final boolean scoped[] = new boolean[1];
+        final boolean[] registered = new boolean[1];
         Arrays.stream(witness.getClass().getAnnotations())
             .filter(annotation -> annotation.annotationType().isAnnotationPresent(WitnessScope.class))
             .map(Annotation::annotationType)
@@ -51,15 +49,11 @@ public final class Witnesses {
             .filter(Optional::isPresent)
             .map(Optional::get)
             .forEach(registar -> {
-                scoped[0] = true;
-                this.giveSomeInformation(witness, registar);
+                registered[0] = true;
                 registar.register(witness);
             });
-        if (!scoped[0]) {
-            this.registrar(WitnessScope.Sponge.class).ifPresent(registar -> {
-                this.giveSomeInformation(witness, registar);
-                registar.register(witness);
-            });
+        if(!registered[0]) {
+            throw new IllegalStateException("No scopes specified, nothing registered");
         }
     }
 
@@ -75,9 +69,5 @@ public final class Witnesses {
         registrar = this.injector.getInstance(scope.registrar());
         this.registars.put(annotation, registrar);
         return Optional.of(registrar);
-    }
-
-    private void giveSomeInformation(final Witness witness, final WitnessRegistrar registrar) {
-        this.logger.debug("Registering witness '{}' with registrar '{}'", witness, registrar);
     }
 }

@@ -22,21 +22,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.sponge.inject.event;
+package com.almuradev.toolbox.sponge.event;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.almuradev.toolbox.event.Witness;
+import org.spongepowered.api.GameState;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface WitnessScope {
-    Class<? extends WitnessRegistrar> registrar();
+import java.util.function.Predicate;
 
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.TYPE)
-    @WitnessScope(registrar = SpongeWitnessRegistrar.class)
-    @interface Sponge {
-    }
+/**
+ * A witness whose activation depends on a game lifecycle state.
+ */
+public interface LifecycleWitness extends Witness {
+  /**
+   * Tests if this witness is subscribable.
+   *
+   * @param state the game state
+   * @return {@code true} if this witness is subscribable
+   */
+  boolean lifecycleSubscribable(final GameState state);
+
+  @Override
+  default boolean subscribable() {
+    return false; // default by false
+  }
+
+  /**
+   * Creates a predicate which may be used to check if a lifecycle witness is subscribable.
+   *
+   * @param state the game state
+   * @return the predicate
+   */
+  static Predicate<LifecycleWitness> predicate(final GameState state) {
+    return Witness.<LifecycleWitness>predicate().and(witness -> witness.lifecycleSubscribable(state));
+  }
 }

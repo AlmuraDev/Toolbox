@@ -22,8 +22,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.sponge.inject.event;
+package com.almuradev.toolbox.event;
 
-public interface WitnessRegistrar {
-    void register(final Witness witness);
+import net.kyori.membrane.facet.Activatable;
+import net.kyori.membrane.facet.Facet;
+
+import java.util.function.Predicate;
+
+/**
+ * Something that can listen to events.
+ */
+public interface Witness extends Facet {
+  /**
+   * Creates a predicate which may be used to check if a witness is subscribable.
+   *
+   * @param <W> the witness type
+   * @return the predicate
+   */
+  static <W extends Witness> Predicate<W> predicate() {
+    return witness -> Activatable.predicate().test(witness) && witness.subscribable();
+  }
+
+  /**
+   * Tests if this witness is subscribable.
+   *
+   * @return {@code true} if this witness is subscribable
+   */
+  default boolean subscribable() {
+    return true;
+  }
+
+  /**
+   * An abstract helper implementation of a witness.
+   *
+   * <p>It is not necessary to extend this class.</p>
+   */
+  abstract class Impl implements Witness {
+    boolean subscribed;
+
+    @Override
+    public boolean subscribable() {
+      return !this.subscribed;
+    }
+
+    public void subscribed() {
+      this.subscribed = true;
+    }
+  }
 }
