@@ -27,5 +27,6 @@ package com.almuradev.toolbox.forge.inject.network;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public interface Channels {
-  @NonNull Channel get(final @NonNull String name, final Channel.@NonNull Type type);
+
+    @NonNull Channel get(final @NonNull String name, final Channel.@NonNull Type type);
 }

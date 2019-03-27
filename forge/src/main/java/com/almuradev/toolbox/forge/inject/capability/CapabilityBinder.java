@@ -40,7 +40,8 @@ public final class CapabilityBinder {
     }
 
     /**
-     * Registers a new {@link Capability}
+     * Registers a new {@link Capability}.
+     *
      * @param capabilityClass The capability class, usually a marker interface
      * @param capabilityStorage The capability storage, used to handle persistence
      * @param instanceFactory The instance factory, used to create capability instances when passed the capability class

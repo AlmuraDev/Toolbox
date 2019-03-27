@@ -31,5 +31,7 @@ public final class CommonModule extends AbstractModule implements ModToolboxBind
 
     @Override
     protected void configure() {
+        this.facet()
+            .add(NetworkTester.class);
     }
 }

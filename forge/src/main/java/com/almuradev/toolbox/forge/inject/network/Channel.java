@@ -30,13 +30,15 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.function.Consumer;
 
 public interface Channel {
-  @NonNull String name();
 
-  @NonNull Type type();
+    @NonNull String name();
 
-  <I extends IMessage, O extends IMessage> @NonNull Channel bind(final @NonNull Class<I> inboundPacket, final @NonNull Consumer<PacketEntry<I, O>> consumer);
+    @NonNull Type type();
 
-  enum Type {
-    INDEXED;
-  }
+    <I extends IMessage, O extends IMessage> @NonNull Channel bind(final @NonNull Class<I> inboundPacket,
+        final @NonNull Consumer<PacketEntry<I, O>> consumer);
+
+    enum Type {
+        INDEXED
+    }
 }

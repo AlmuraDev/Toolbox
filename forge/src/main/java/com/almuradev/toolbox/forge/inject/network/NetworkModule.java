@@ -25,17 +25,16 @@
 package com.almuradev.toolbox.forge.inject.network;
 
 import com.almuradev.toolbox.forge.inject.ModToolboxBinder;
-import net.kyori.membrane.facet.FacetBinder;
 import net.kyori.violet.AbstractModule;
 
 public final class NetworkModule extends AbstractModule implements ModToolboxBinder {
+
     @Override
     public void configure() {
         this.installFactory(ChannelImpl.Factory.class);
         this.bind(Channels.class).to(ChannelsImpl.class);
         this.bind(Channel.class).annotatedWith(ChannelId.class).toProvider(ChannelProvider.class);
-
-        final FacetBinder facets = new FacetBinder(this.binder());
-        facets.add().to(ChannelsImpl.class);
+        this.facet()
+            .add().to(ChannelsImpl.class);
     }
 }

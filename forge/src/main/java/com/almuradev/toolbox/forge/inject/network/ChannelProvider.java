@@ -6,24 +6,25 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 final class ChannelProvider implements Provider<Channel> {
-  private final Provider<ModInjectionPoint> point;
-  private final Channels channels;
 
-  @Inject
-  private ChannelProvider(final Provider<ModInjectionPoint> point, final Channels channels) {
-    this.point = point;
-    this.channels = channels;
-  }
+    private final Provider<ModInjectionPoint> point;
+    private final Channels channels;
 
-  @Override
-  public Channel get() {
-    final ModInjectionPoint point = this.point.get();
-    final Channel.Type type;
-    if(point.isAnnotationPresent(Indexed.class)) {
-      type = Channel.Type.INDEXED;
-    } else {
-      throw new IllegalStateException();
+    @Inject
+    private ChannelProvider(final Provider<ModInjectionPoint> point, final Channels channels) {
+        this.point = point;
+        this.channels = channels;
     }
-    return this.channels.get(point.getAnnotation(ChannelId.class).value(), type);
-  }
+
+    @Override
+    public Channel get() {
+        final ModInjectionPoint point = this.point.get();
+        final Channel.Type type;
+        if (point.isAnnotationPresent(Indexed.class)) {
+            type = Channel.Type.INDEXED;
+        } else {
+            throw new IllegalStateException();
+        }
+        return this.channels.get(point.getAnnotation(ChannelId.class).value(), type);
+    }
 }

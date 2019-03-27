@@ -36,30 +36,31 @@ import javax.inject.Singleton;
 
 @Singleton
 public class ChannelsImpl implements Enableable, Channels {
-  private final Map<String, ChannelImpl> channels = new HashMap<>();
-  private final Injector injector;
-  private final ChannelImpl.Factory factory;
 
-  @Inject
-  private ChannelsImpl(final Injector injector, final ChannelImpl.Factory factory) {
-    this.injector = injector;
-    this.factory = factory;
-  }
+    private final Map<String, ChannelImpl> channels = new HashMap<>();
+    private final Injector injector;
+    private final ChannelImpl.Factory factory;
 
-  @Override
-  public @NonNull Channel get(final @NonNull String name, final Channel.@NonNull Type type) {
-    return this.channels.computeIfAbsent(name, $ -> this.factory.create(name, type));
-  }
-
-  @Override
-  public void enable() {
-    for(final ChannelImpl channel : this.channels.values()) {
-      channel.enable(this.injector);
+    @Inject
+    private ChannelsImpl(final Injector injector, final ChannelImpl.Factory factory) {
+        this.injector = injector;
+        this.factory = factory;
     }
-  }
 
-  @Override
-  public void disable() {
-    // TODO(kashike)
-  }
+    @Override
+    public @NonNull Channel get(final @NonNull String name, final Channel.@NonNull Type type) {
+        return this.channels.computeIfAbsent(name, $ -> this.factory.create(name, type));
+    }
+
+    @Override
+    public void enable() {
+        for (final ChannelImpl channel : this.channels.values()) {
+            channel.enable(this.injector);
+        }
+    }
+
+    @Override
+    public void disable() {
+        // TODO(kashike)
+    }
 }
