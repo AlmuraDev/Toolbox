@@ -22,20 +22,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.test.server;
+package com.almuradev.toolbox.forge.inject.command;
 
-import com.almuradev.toolbox.forge.test.CommonModule;
-import com.almuradev.toolbox.forge.inject.ModToolboxBinder;
-import net.kyori.violet.AbstractModule;
+import com.almuradev.toolbox.event.Witness;
+import com.almuradev.toolbox.forge.inject.event.scope.LifecycleEventBusScope;
+import com.google.common.eventbus.Subscribe;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import net.minecraft.command.CommandHandler;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
-public final class ServerModule extends AbstractModule implements ModToolboxBinder {
+import java.util.Set;
 
-    @Override
-    protected void configure() {
-        this.install(new CommonModule());
-        this.facet()
-            .add(EventTester.class);
-        this.command()
-            .register(CommandGeneratorTest.generatePingCommand());
+@LifecycleEventBusScope
+public final class CommandInstaller implements Witness {
+
+    private final Injector injector;
+    private final Set<CommandEntry> commands;
+
+    @Inject
+    public CommandInstaller(final Injector injector, final Set<CommandEntry> commands) {
+        this.injector = injector;
+        this.commands = commands;
+    }
+
+    @Subscribe
+    public void onFMLStartingServer(final FMLServerStartingEvent event) {
+        this.commands.forEach(entry -> entry.install(this.injector, (CommandHandler) event.getServer().getCommandManager()));
     }
 }

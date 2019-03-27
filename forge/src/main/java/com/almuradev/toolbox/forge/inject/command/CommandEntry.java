@@ -22,20 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.test.server;
+package com.almuradev.toolbox.forge.inject.command;
 
-import com.almuradev.toolbox.forge.test.CommonModule;
-import com.almuradev.toolbox.forge.inject.ModToolboxBinder;
-import net.kyori.violet.AbstractModule;
+import com.google.inject.Injector;
+import net.minecraft.command.CommandHandler;
+import net.minecraft.command.ICommand;
 
-public final class ServerModule extends AbstractModule implements ModToolboxBinder {
+class CommandEntry {
 
-    @Override
-    protected void configure() {
-        this.install(new CommonModule());
-        this.facet()
-            .add(EventTester.class);
-        this.command()
-            .register(CommandGeneratorTest.generatePingCommand());
+    private ICommand command;
+
+    CommandEntry(final ICommand command) {
+        this.command = command;
+    }
+
+    void install(final Injector injector, final CommandHandler handler) {
+        handler.registerCommand(this.command);
     }
 }

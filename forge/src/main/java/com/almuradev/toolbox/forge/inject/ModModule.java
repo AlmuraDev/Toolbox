@@ -24,6 +24,7 @@
  */
 package com.almuradev.toolbox.forge.inject;
 
+import com.almuradev.toolbox.forge.inject.command.CommandModule;
 import com.almuradev.toolbox.forge.inject.event.WitnessModule;
 import com.almuradev.toolbox.forge.inject.capability.CapabilityModule;
 import com.almuradev.toolbox.forge.inject.network.NetworkModule;
@@ -48,6 +49,7 @@ public final class ModModule extends AbstractModule {
         this.install(new InjectionPointProvider());
         this.install(new WitnessModule());
         this.install(new NetworkModule());
+        this.install(new CommandModule());
         this.install(new CapabilityModule());
     }
 }

@@ -35,7 +35,8 @@ import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 
 @Mod(
     modid = Constants.ID,
-    name = Constants.NAME
+    name = Constants.NAME,
+    acceptableRemoteVersions = "*"
 )
 public final class TestMod {
 

@@ -22,20 +22,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.test.server;
+package com.almuradev.toolbox.forge.inject.command;
 
-import com.almuradev.toolbox.forge.test.CommonModule;
-import com.almuradev.toolbox.forge.inject.ModToolboxBinder;
-import net.kyori.violet.AbstractModule;
+import com.google.inject.Binder;
+import com.google.inject.TypeLiteral;
+import com.google.inject.multibindings.Multibinder;
+import net.minecraft.command.ICommand;
 
-public final class ServerModule extends AbstractModule implements ModToolboxBinder {
+public final class CommandBinder {
+    private final Multibinder<CommandEntry> commands;
 
-    @Override
-    protected void configure() {
-        this.install(new CommonModule());
-        this.facet()
-            .add(EventTester.class);
-        this.command()
-            .register(CommandGeneratorTest.generatePingCommand());
+    public CommandBinder(final Binder binder) {
+        this.commands = Multibinder.newSetBinder(binder, new TypeLiteral<CommandEntry>() {});
+    }
+
+    /**
+     * Registers a new {@link ICommand}.
+     *
+     * @param command the command
+     * @return this object, for chaining
+     */
+    public <T> CommandBinder register(final ICommand command) {
+        this.commands.addBinding().toInstance(new CommandEntry(command));
+        return this;
     }
 }

@@ -22,20 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.test.server;
+package com.almuradev.toolbox.forge.inject.command;
 
-import com.almuradev.toolbox.forge.test.CommonModule;
 import com.almuradev.toolbox.forge.inject.ModToolboxBinder;
 import net.kyori.violet.AbstractModule;
 
-public final class ServerModule extends AbstractModule implements ModToolboxBinder {
+public final class CommandModule extends AbstractModule implements ModToolboxBinder {
 
     @Override
     protected void configure() {
-        this.install(new CommonModule());
+        // Force a bind
+        this.command();
+
         this.facet()
-            .add(EventTester.class);
-        this.command()
-            .register(CommandGeneratorTest.generatePingCommand());
+            .add(CommandInstaller.class);
     }
 }

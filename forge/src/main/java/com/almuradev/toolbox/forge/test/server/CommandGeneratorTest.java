@@ -24,18 +24,35 @@
  */
 package com.almuradev.toolbox.forge.test.server;
 
-import com.almuradev.toolbox.forge.test.CommonModule;
-import com.almuradev.toolbox.forge.inject.ModToolboxBinder;
-import net.kyori.violet.AbstractModule;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
 
-public final class ServerModule extends AbstractModule implements ModToolboxBinder {
+public final class CommandGeneratorTest {
 
-    @Override
-    protected void configure() {
-        this.install(new CommonModule());
-        this.facet()
-            .add(EventTester.class);
-        this.command()
-            .register(CommandGeneratorTest.generatePingCommand());
+    public static ICommand generatePingCommand() {
+        return new CommandBase() {
+            @Override
+            public String getName() {
+                return "ping";
+            }
+
+            @Override
+            public String getUsage(final ICommandSender sender) {
+                return "ping <word>";
+            }
+
+            @Override
+            public void execute(final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
+                if (args.length == 0) {
+                    return;
+                }
+
+                sender.sendMessage(new TextComponentString("pong -> " + args[0]));
+            }
+        };
     }
 }
