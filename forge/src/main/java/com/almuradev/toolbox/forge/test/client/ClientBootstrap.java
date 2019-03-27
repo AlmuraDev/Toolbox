@@ -24,13 +24,13 @@
  */
 package com.almuradev.toolbox.forge.test.client;
 
-import com.almuradev.toolbox.forge.test.CommonBootstrap;
-import com.google.inject.Injector;
+import com.almuradev.toolbox.forge.ModBootstrap;
+import com.google.inject.Module;
 
-public final class ClientBootstrap extends CommonBootstrap {
+public final class ClientBootstrap extends ModBootstrap {
 
     @Override
-    protected Injector createInjector(final Injector parent) {
-        return parent.createChildInjector(new ClientModule());
+    public Module createModule() {
+        return new ClientModule();
     }
 }

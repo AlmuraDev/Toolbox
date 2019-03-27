@@ -22,10 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.sponge.inject.event;
+package com.almuradev.toolbox.forge.inject.event.scope;
 
-import com.almuradev.toolbox.event.WitnessRegistrar;
 import com.almuradev.toolbox.event.WitnessScope;
+import com.almuradev.toolbox.forge.inject.event.registrar.NormalEventBusWitnessRegistrar;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -34,7 +34,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@WitnessScope(registrar = EventManagerWitnessRegistrar.class)
-public @interface EventManagerWitnessScope {
-  Class<? extends WitnessRegistrar> registrar();
+@WitnessScope(registrar = NormalEventBusWitnessRegistrar.class)
+public @interface NormalEventBusScope {
+
 }

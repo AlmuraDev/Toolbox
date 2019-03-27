@@ -24,10 +24,11 @@
  */
 package com.almuradev.toolbox.forge.test.client;
 
+import com.almuradev.toolbox.forge.inject.ModToolboxBinder;
 import com.almuradev.toolbox.forge.test.CommonModule;
 import net.kyori.violet.AbstractModule;
 
-public final class ClientModule extends AbstractModule {
+public final class ClientModule extends AbstractModule implements ModToolboxBinder {
 
     @Override
     public void configure() {

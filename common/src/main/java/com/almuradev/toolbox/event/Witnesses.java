@@ -48,12 +48,12 @@ public final class Witnesses {
             .map(this::registrar)
             .filter(Optional::isPresent)
             .map(Optional::get)
-            .forEach(registar -> {
+            .forEach(registrar -> {
                 registered[0] = true;
-                registar.register(witness);
+                registrar.register(witness);
             });
-        if(!registered[0]) {
-            throw new IllegalStateException("No scopes specified, nothing registered");
+        if (!registered[0]) {
+            throw new IllegalStateException("No scopes specified, nothing registered.");
         }
     }
 

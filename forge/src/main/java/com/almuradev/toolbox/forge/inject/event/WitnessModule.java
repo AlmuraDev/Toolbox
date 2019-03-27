@@ -29,6 +29,7 @@ import com.almuradev.toolbox.event.Witnesses;
 import com.almuradev.toolbox.inject.ToolboxBinder;
 import net.kyori.membrane.facet.internal.Facets;
 import net.kyori.violet.AbstractModule;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 
 import java.util.stream.Stream;
@@ -37,25 +38,27 @@ import javax.inject.Inject;
 
 public final class WitnessModule extends AbstractModule implements ToolboxBinder {
 
-  @Inject private EventBus bus;
   @Inject private Witnesses witnesses;
   @Inject private Facets facets;
 
   @Override
   protected void configure() {
+    this.bind(EventBus.class).annotatedWith(new BusImpl(BusType.NORMAL)).toProvider(() -> MinecraftForge.EVENT_BUS);
+    this.bind(EventBus.class).annotatedWith(new BusImpl(BusType.ORE)).toProvider(() -> MinecraftForge.ORE_GEN_BUS);
+    this.bind(EventBus.class).annotatedWith(new BusImpl(BusType.TERRAIN)).toProvider(() -> MinecraftForge.TERRAIN_GEN_BUS);
+
     this.facet();
     this.requestInjection(this);
   }
 
   @Inject
   private void earlyConfigure() {
-    this.bus.register(this);
     this.register(this.facets.of(Witness.class, Witness.predicate()));
   }
 
   private void register(final Stream<? extends Witness> stream) {
     stream.forEach(witness -> {
-      if(witness instanceof Witness.Impl) {
+      if (witness instanceof Witness.Impl) {
         ((Witness.Impl) witness).subscribed();
       }
 

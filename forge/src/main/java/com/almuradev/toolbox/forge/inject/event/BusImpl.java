@@ -24,17 +24,36 @@
  */
 package com.almuradev.toolbox.forge.inject.event;
 
-import com.almuradev.toolbox.event.WitnessRegistrar;
-import com.almuradev.toolbox.event.WitnessScope;
+import java.lang.annotation.Annotation;
+import java.util.Objects;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public final class BusImpl implements Bus {
+    private final BusType type;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@WitnessScope(registrar = EventBusWitnessRegistrar.class)
-public @interface EventBusWitnessScope {
-    Class<? extends WitnessRegistrar> registrar();
+    public BusImpl(final BusType type) {
+        this.type = type;
+    }
+
+    @Override
+    public BusType type() {
+        return this.type;
+    }
+
+    @Override
+    public Class<? extends Annotation> annotationType() {
+        return Bus.class;
+    }
+
+    @Override
+    public boolean equals(final Object other) {
+        if(this == other) return true;
+        if(other == null || this.getClass() != other.getClass()) return false;
+        final BusImpl that = (BusImpl) other;
+        return this.type == that.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.type);
+    }
 }

@@ -24,6 +24,7 @@
  */
 package com.almuradev.toolbox.forge.test;
 
+import com.almuradev.toolbox.forge.ModBootstrap;
 import com.almuradev.toolbox.forge.inject.ModModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -42,14 +43,13 @@ public final class TestMod {
         clientSide = "com.almuradev.toolbox.forge.test.client.ClientBootstrap",
         serverSide = "com.almuradev.toolbox.forge.test.server.ServerBootstrap"
     )
-    private static CommonBootstrap bootstrap;
+    private static ModBootstrap bootstrap;
 
     private Facets facets;
 
     @Mod.EventHandler
     public void onConstruction(final FMLConstructionEvent event) {
-        final Injector injector = Guice.createInjector(new ModModule());
-        bootstrap.construct(injector);
+        final Injector injector = Guice.createInjector(new ModModule(), bootstrap.createModule());
         this.facets = injector.getInstance(Facets.class);
         this.facets.enable();
     }

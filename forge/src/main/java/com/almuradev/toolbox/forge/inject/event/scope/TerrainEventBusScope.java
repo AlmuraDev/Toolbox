@@ -22,15 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.test;
+package com.almuradev.toolbox.forge.inject.event.scope;
 
-import com.google.inject.Injector;
+import com.almuradev.toolbox.event.WitnessScope;
+import com.almuradev.toolbox.forge.inject.event.registrar.TerrainEventBusWitnessRegistrar;
 
-public abstract class CommonBootstrap {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    protected final void construct(final Injector injector) {
-        this.createInjector(injector);
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@WitnessScope(registrar = TerrainEventBusWitnessRegistrar.class)
+public @interface TerrainEventBusScope {
 
-    protected abstract Injector createInjector(final Injector parent);
 }

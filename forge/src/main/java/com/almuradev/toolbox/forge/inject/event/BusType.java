@@ -22,30 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject;
+package com.almuradev.toolbox.forge.inject.event;
 
-import com.almuradev.toolbox.forge.inject.event.WitnessModule;
-import com.almuradev.toolbox.forge.inject.network.NetworkModule;
-import net.kyori.violet.AbstractModule;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
-import net.minecraftforge.fml.relauncher.Side;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-public final class ModModule extends AbstractModule {
-
-    @Override
-    public void configure() {
-        this.bind(Side.class).toInstance(FMLCommonHandler.instance().getSide());
-
-        final ModContainer container = Loader.instance().activeModContainer();
-        this.bind(ModContainer.class).toInstance(container);
-        this.bind(Logger.class).toInstance(LogManager.getLogger(container.getModId()));
-
-        this.install(new InjectionPointProvider());
-        this.install(new WitnessModule());
-        this.install(new NetworkModule());
-    }
+public enum BusType {
+    NORMAL,
+    ORE,
+    TERRAIN
 }

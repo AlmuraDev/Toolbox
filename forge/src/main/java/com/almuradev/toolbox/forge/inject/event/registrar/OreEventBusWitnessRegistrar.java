@@ -22,20 +22,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject.event;
+package com.almuradev.toolbox.forge.inject.event.registrar;
 
 import com.almuradev.toolbox.event.Witness;
 import com.almuradev.toolbox.event.WitnessRegistrar;
+import com.almuradev.toolbox.forge.inject.event.Bus;
+import com.almuradev.toolbox.forge.inject.event.BusType;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import net.minecraftforge.fml.common.eventhandler.EventBus;
 
 @Singleton
-public class EventBusWitnessRegistrar implements WitnessRegistrar {
-    @Inject private EventBus bus;
+public final class OreEventBusWitnessRegistrar implements WitnessRegistrar {
+    @Inject @Bus(type = BusType.ORE) private EventBus bus;
 
     @Override
-    public void register(final Witness witness) {
+    public void register(Witness witness) {
         this.bus.register(witness);
     }
 }
