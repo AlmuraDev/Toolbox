@@ -25,7 +25,6 @@
 package com.almuradev.toolbox.forge.inject.event;
 
 import java.lang.annotation.Annotation;
-import java.util.Objects;
 
 public final class BusImpl implements Bus {
     private final BusType type;
@@ -54,6 +53,6 @@ public final class BusImpl implements Bus {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.type);
+        return (127 * "type".hashCode()) ^ this.type.hashCode();
     }
 }
