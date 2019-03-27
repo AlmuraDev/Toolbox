@@ -22,34 +22,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject.event.capability;
+package com.almuradev.toolbox.forge.inject.capability;
 
-import com.almuradev.toolbox.event.Witness;
-import com.almuradev.toolbox.forge.inject.event.scope.LifecycleEventBusScope;
-import com.google.common.eventbus.Subscribe;
 import com.google.inject.Injector;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 
-import java.util.Set;
+import java.util.concurrent.Callable;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+final class CapabilityEntry {
 
-@Singleton
-@LifecycleEventBusScope
-public final class CapabilityInstaller implements Witness {
+    private Class<Object> capabilityClazz;
+    private Capability.IStorage<Object> capabilityStorage;
+    private Callable<Object> factory;
 
-    private final Injector injector;
-    private final Set<CapabilityEntry> capabilities;
-
-    @Inject
-    public CapabilityInstaller(final Injector injector, final Set<CapabilityEntry> capabilities) {
-        this.injector = injector;
-        this.capabilities = capabilities;
+    CapabilityEntry(final Class<Object> capabilityClazz, final Capability.IStorage<Object> capabilityStorage, final Callable<Object> factory) {
+        this.capabilityClazz = capabilityClazz;
+        this.capabilityStorage = capabilityStorage;
+        this.factory = factory;
     }
 
-    @Subscribe
-    public void onFMLPreInitialization(final FMLPreInitializationEvent event) {
-        this.capabilities.forEach((capability) -> capability.install(this.injector));
+    void install(final Injector injector) {
+        CapabilityManager.INSTANCE.register(this.capabilityClazz, this.capabilityStorage, this.factory);
     }
 }

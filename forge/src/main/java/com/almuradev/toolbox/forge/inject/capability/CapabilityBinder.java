@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject.event.capability;
+package com.almuradev.toolbox.forge.inject.capability;
 
 import com.google.inject.Binder;
 import com.google.inject.TypeLiteral;

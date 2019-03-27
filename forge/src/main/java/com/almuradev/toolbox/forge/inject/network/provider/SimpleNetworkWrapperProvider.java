@@ -33,20 +33,15 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 public final class SimpleNetworkWrapperProvider implements Provider<SimpleNetworkWrapper> {
 
-    @Inject private Provider<ModInjectionPoint> point;
+    private final SimpleNetworkWrapper network;
 
-    private SimpleNetworkWrapper network;
-
-    final String getChannel() {
-        return this.point.get().getAnnotation(ChannelId.class).value();
+    @Inject
+    public SimpleNetworkWrapperProvider(final Provider<ModInjectionPoint> point) {
+        this.network = NetworkRegistry.INSTANCE.newSimpleChannel(point.get().getAnnotation(ChannelId.class).value());
     }
 
     @Override
     public SimpleNetworkWrapper get() {
-        if (this.network == null) {
-            this.network = NetworkRegistry.INSTANCE.newSimpleChannel(this.getChannel());
-        }
-
         return this.network;
     }
 }

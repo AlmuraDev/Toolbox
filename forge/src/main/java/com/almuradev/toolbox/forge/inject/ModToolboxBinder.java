@@ -24,7 +24,7 @@
  */
 package com.almuradev.toolbox.forge.inject;
 
-import com.almuradev.toolbox.forge.inject.event.capability.CapabilityBinder;
+import com.almuradev.toolbox.forge.inject.capability.CapabilityBinder;
 import com.almuradev.toolbox.forge.inject.network.PacketBinder;
 import com.almuradev.toolbox.forge.inject.network.indexed.IndexedPacketBinder;
 import com.almuradev.toolbox.inject.ToolboxBinder;

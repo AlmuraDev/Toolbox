@@ -25,8 +25,7 @@
 package com.almuradev.toolbox.forge.inject;
 
 import com.almuradev.toolbox.forge.inject.event.WitnessModule;
-import com.almuradev.toolbox.forge.inject.event.capability.CapabilityInstaller;
-import com.almuradev.toolbox.forge.inject.event.capability.CapabilityModule;
+import com.almuradev.toolbox.forge.inject.capability.CapabilityModule;
 import com.almuradev.toolbox.forge.inject.network.NetworkModule;
 import net.kyori.violet.AbstractModule;
 import net.minecraftforge.fml.common.FMLCommonHandler;

@@ -22,19 +22,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject.event.capability;
+package com.almuradev.toolbox.forge.inject.capability;
 
-import com.almuradev.toolbox.forge.inject.ModToolboxBinder;
-import net.kyori.violet.AbstractModule;
+import com.almuradev.toolbox.event.Witness;
+import com.almuradev.toolbox.forge.inject.event.scope.LifecycleEventBusScope;
+import com.google.common.eventbus.Subscribe;
+import com.google.inject.Injector;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-public final class CapabilityModule extends AbstractModule implements ModToolboxBinder {
+import java.util.Set;
 
-    @Override
-    protected void configure() {
-        // Force a bind
-        this.capability();
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
-        this.facet()
-            .add(CapabilityInstaller.class);
+@Singleton
+@LifecycleEventBusScope
+public final class CapabilityInstaller implements Witness {
+
+    private final Injector injector;
+    private final Set<CapabilityEntry> capabilities;
+
+    @Inject
+    public CapabilityInstaller(final Injector injector, final Set<CapabilityEntry> capabilities) {
+        this.injector = injector;
+        this.capabilities = capabilities;
+    }
+
+    @Subscribe
+    public void onFMLPreInitialization(final FMLPreInitializationEvent event) {
+        this.capabilities.forEach((capability) -> capability.install(this.injector));
     }
 }

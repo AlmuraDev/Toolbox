@@ -22,27 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject.event.capability;
+package com.almuradev.toolbox.forge.inject.capability;
 
-import com.google.inject.Injector;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
+import com.almuradev.toolbox.forge.inject.ModToolboxBinder;
+import net.kyori.violet.AbstractModule;
 
-import java.util.concurrent.Callable;
+public final class CapabilityModule extends AbstractModule implements ModToolboxBinder {
 
-final class CapabilityEntry {
+    @Override
+    protected void configure() {
+        // Force a bind
+        this.capability();
 
-    private Class<Object> capabilityClazz;
-    private Capability.IStorage<Object> capabilityStorage;
-    private Callable<Object> factory;
-
-    CapabilityEntry(final Class<Object> capabilityClazz, final Capability.IStorage<Object> capabilityStorage, final Callable<Object> factory) {
-        this.capabilityClazz = capabilityClazz;
-        this.capabilityStorage = capabilityStorage;
-        this.factory = factory;
-    }
-
-    void install(final Injector injector) {
-        CapabilityManager.INSTANCE.register(this.capabilityClazz, this.capabilityStorage, this.factory);
+        this.facet()
+            .add(CapabilityInstaller.class);
     }
 }
