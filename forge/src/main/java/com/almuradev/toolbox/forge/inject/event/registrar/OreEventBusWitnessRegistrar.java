@@ -34,10 +34,15 @@ import net.minecraftforge.fml.common.eventhandler.EventBus;
 
 @Singleton
 public final class OreEventBusWitnessRegistrar implements WitnessRegistrar {
-    @Inject @Bus(type = BusType.ORE) private EventBus bus;
+    private final EventBus bus;
+
+    @Inject
+    public OreEventBusWitnessRegistrar(@Bus(type = BusType.ORE) final EventBus bus) {
+        this.bus = bus;
+    }
 
     @Override
-    public void register(Witness witness) {
+    public void register(final Witness witness) {
         this.bus.register(witness);
     }
 }

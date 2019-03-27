@@ -25,21 +25,30 @@
 package com.almuradev.toolbox.forge.test.server;
 
 import com.almuradev.toolbox.event.Witness;
+import com.almuradev.toolbox.forge.inject.event.scope.LifecycleEventBusScope;
 import com.almuradev.toolbox.forge.inject.event.scope.NormalEventBusScope;
 import com.almuradev.toolbox.forge.inject.event.scope.OreEventBusScope;
 import com.almuradev.toolbox.forge.inject.event.scope.TerrainEventBusScope;
+import com.google.common.eventbus.Subscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.terraingen.OreGenEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import javax.inject.Singleton;
 
 @Singleton
+@LifecycleEventBusScope
 @NormalEventBusScope
 @TerrainEventBusScope
 @OreEventBusScope
 public final class EventTester implements Witness {
+
+    @Subscribe
+    public void onEvent(FMLServerAboutToStartEvent event) {
+        System.err.println(event);
+    }
 
     @SubscribeEvent
     public void onEvent(EntityJoinWorldEvent event) {

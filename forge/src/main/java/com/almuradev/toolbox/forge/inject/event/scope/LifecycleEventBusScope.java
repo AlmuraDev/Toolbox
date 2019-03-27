@@ -22,23 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.sponge.inject.event;
+package com.almuradev.toolbox.forge.inject.event.scope;
 
-import com.almuradev.toolbox.event.Witness;
-import com.almuradev.toolbox.event.WitnessRegistrar;
-import org.spongepowered.api.event.EventManager;
-import org.spongepowered.api.plugin.PluginContainer;
+import com.almuradev.toolbox.event.WitnessScope;
+import com.almuradev.toolbox.forge.inject.event.registrar.LifecycleEventBusWitnessRegistrar;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Singleton
-public class EventManagerWitnessRegistrar implements WitnessRegistrar {
-  private @Inject PluginContainer plugin;
-  private @Inject EventManager em;
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@WitnessScope(registrar = LifecycleEventBusWitnessRegistrar.class)
+public @interface LifecycleEventBusScope {
 
-  @Override
-  public void register(final Witness witness) {
-    this.em.registerListeners(this.plugin, witness);
-  }
 }

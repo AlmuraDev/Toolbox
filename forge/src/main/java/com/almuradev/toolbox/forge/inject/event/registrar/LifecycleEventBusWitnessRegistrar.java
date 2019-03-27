@@ -26,19 +26,28 @@ package com.almuradev.toolbox.forge.inject.event.registrar;
 
 import com.almuradev.toolbox.event.Witness;
 import com.almuradev.toolbox.event.WitnessRegistrar;
-import com.almuradev.toolbox.forge.inject.event.Bus;
-import com.almuradev.toolbox.forge.inject.event.BusType;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import net.minecraftforge.fml.common.eventhandler.EventBus;
+import net.minecraftforge.fml.common.ModContainer;
+
+import java.lang.reflect.Field;
 
 @Singleton
-public final class TerrainEventBusWitnessRegistrar implements WitnessRegistrar {
+public final class LifecycleEventBusWitnessRegistrar implements WitnessRegistrar {
     private final EventBus bus;
 
     @Inject
-    public TerrainEventBusWitnessRegistrar(@Bus(type = BusType.TERRAIN) final EventBus bus) {
-        this.bus = bus;
+    public LifecycleEventBusWitnessRegistrar(final ModContainer container) {
+        // This is so bad....
+        try {
+            final Field field = container.getClass().getDeclaredField("eventBus");
+            field.setAccessible(true);
+            this.bus = (EventBus) field.get(container);
+            field.setAccessible(false);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException("Should not be getting here, lifecycle bus is null!");
+        }
     }
 
     @Override

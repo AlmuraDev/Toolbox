@@ -26,10 +26,10 @@ package com.almuradev.toolbox.forge.inject.event;
 
 import java.lang.annotation.Annotation;
 
-public final class BusImpl implements Bus {
+class BusImpl implements Bus {
     private final BusType type;
 
-    public BusImpl(final BusType type) {
+    BusImpl(final BusType type) {
         this.type = type;
     }
 
@@ -45,14 +45,20 @@ public final class BusImpl implements Bus {
 
     @Override
     public boolean equals(final Object other) {
-        if(this == other) return true;
-        if(other == null || this.getClass() != other.getClass()) return false;
+        if (this == other) {
+            return true;
+        }
+        if (other == null || this.getClass() != other.getClass()) {
+            return false;
+        }
         final BusImpl that = (BusImpl) other;
         return this.type == that.type;
     }
 
     @Override
     public int hashCode() {
+        // Does this look strange to you? Blame Oracle
+        // https://docs.oracle.com/javase/7/docs/api/java/lang/annotation/Annotation.html#hashCode()
         return (127 * "type".hashCode()) ^ this.type.hashCode();
     }
 }

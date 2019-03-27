@@ -22,27 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject.event.registrar;
+package com.almuradev.toolbox.forge.capability;
 
-import com.almuradev.toolbox.event.Witness;
-import com.almuradev.toolbox.event.WitnessRegistrar;
-import com.almuradev.toolbox.forge.inject.event.Bus;
-import com.almuradev.toolbox.forge.inject.event.BusType;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import net.minecraftforge.fml.common.eventhandler.EventBus;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.IItemHandler;
 
-@Singleton
-public final class TerrainEventBusWitnessRegistrar implements WitnessRegistrar {
-    private final EventBus bus;
-
-    @Inject
-    public TerrainEventBusWitnessRegistrar(@Bus(type = BusType.TERRAIN) final EventBus bus) {
-        this.bus = bus;
-    }
-
-    @Override
-    public void register(final Witness witness) {
-        this.bus.register(witness);
-    }
+/**
+ * Marker interface for {@link IItemHandler} {@link Capability}s that operate only on one slot.
+ */
+public interface SingleSlotItemHandler extends ToolboxItemHandler {
 }

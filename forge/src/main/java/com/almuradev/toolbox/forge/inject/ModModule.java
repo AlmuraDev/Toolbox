@@ -25,6 +25,8 @@
 package com.almuradev.toolbox.forge.inject;
 
 import com.almuradev.toolbox.forge.inject.event.WitnessModule;
+import com.almuradev.toolbox.forge.inject.event.capability.CapabilityInstaller;
+import com.almuradev.toolbox.forge.inject.event.capability.CapabilityModule;
 import com.almuradev.toolbox.forge.inject.network.NetworkModule;
 import net.kyori.violet.AbstractModule;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -47,5 +49,6 @@ public final class ModModule extends AbstractModule {
         this.install(new InjectionPointProvider());
         this.install(new WitnessModule());
         this.install(new NetworkModule());
+        this.install(new CapabilityModule());
     }
 }

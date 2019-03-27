@@ -22,27 +22,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject.event.registrar;
+package com.almuradev.toolbox.forge.capability;
 
-import com.almuradev.toolbox.event.Witness;
-import com.almuradev.toolbox.event.WitnessRegistrar;
-import com.almuradev.toolbox.forge.inject.event.Bus;
-import com.almuradev.toolbox.forge.inject.event.BusType;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import net.minecraftforge.fml.common.eventhandler.EventBus;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
 
-@Singleton
-public final class TerrainEventBusWitnessRegistrar implements WitnessRegistrar {
-    private final EventBus bus;
+public interface ToolboxItemHandler extends IItemHandler {
 
-    @Inject
-    public TerrainEventBusWitnessRegistrar(@Bus(type = BusType.TERRAIN) final EventBus bus) {
-        this.bus = bus;
-    }
-
-    @Override
-    public void register(final Witness witness) {
-        this.bus.register(witness);
-    }
+    /**
+     * Sets the maximum quantity, "limit", a slot will hold.
+     *
+     * <p>
+     *     Great care must be taken in changing the slot limit as setting the value lower than what
+     *     {@link IItemHandler#getStackInSlot(int)}'s {@link ItemStack#getCount()} will result in loss of
+     *     data as the count will be set to the limit.
+     * </p>
+     *
+     * @param slot the slow
+     * @param limit the limit
+     */
+    void setSlotLimit(int slot, int limit);
 }

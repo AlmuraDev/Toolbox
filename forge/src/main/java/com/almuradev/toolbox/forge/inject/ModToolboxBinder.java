@@ -24,11 +24,16 @@
  */
 package com.almuradev.toolbox.forge.inject;
 
+import com.almuradev.toolbox.forge.inject.event.capability.CapabilityBinder;
 import com.almuradev.toolbox.forge.inject.network.PacketBinder;
 import com.almuradev.toolbox.forge.inject.network.indexed.IndexedPacketBinder;
 import com.almuradev.toolbox.inject.ToolboxBinder;
 
 public interface ModToolboxBinder extends ToolboxBinder {
+
+    default CapabilityBinder capability() {
+        return new CapabilityBinder(this.binder());
+    }
 
     default PacketBinder indexedPacket() {
         return new IndexedPacketBinder(this.binder());

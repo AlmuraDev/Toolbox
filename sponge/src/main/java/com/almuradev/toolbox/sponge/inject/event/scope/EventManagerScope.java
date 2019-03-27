@@ -22,27 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject.event.registrar;
+package com.almuradev.toolbox.sponge.inject.event.scope;
 
-import com.almuradev.toolbox.event.Witness;
-import com.almuradev.toolbox.event.WitnessRegistrar;
-import com.almuradev.toolbox.forge.inject.event.Bus;
-import com.almuradev.toolbox.forge.inject.event.BusType;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import net.minecraftforge.fml.common.eventhandler.EventBus;
+import com.almuradev.toolbox.event.WitnessScope;
+import com.almuradev.toolbox.sponge.inject.event.registrar.EventManagerWitnessRegistrar;
 
-@Singleton
-public final class TerrainEventBusWitnessRegistrar implements WitnessRegistrar {
-    private final EventBus bus;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    @Inject
-    public TerrainEventBusWitnessRegistrar(@Bus(type = BusType.TERRAIN) final EventBus bus) {
-        this.bus = bus;
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@WitnessScope(registrar = EventManagerWitnessRegistrar.class)
+public @interface EventManagerScope {
 
-    @Override
-    public void register(final Witness witness) {
-        this.bus.register(witness);
-    }
 }

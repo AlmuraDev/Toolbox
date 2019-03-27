@@ -22,27 +22,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject.event.registrar;
+package com.almuradev.toolbox.forge.capability;
 
-import com.almuradev.toolbox.event.Witness;
-import com.almuradev.toolbox.event.WitnessRegistrar;
-import com.almuradev.toolbox.forge.inject.event.Bus;
-import com.almuradev.toolbox.forge.inject.event.BusType;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import net.minecraftforge.fml.common.eventhandler.EventBus;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.IItemHandler;
 
-@Singleton
-public final class TerrainEventBusWitnessRegistrar implements WitnessRegistrar {
-    private final EventBus bus;
+/**
+ * Marker interface for {@link IItemHandler} {@link Capability}s that operate on multiple slots with resizing support.
+ */
+public interface MultiSlotItemHandler extends ToolboxItemHandler {
 
-    @Inject
-    public TerrainEventBusWitnessRegistrar(@Bus(type = BusType.TERRAIN) final EventBus bus) {
-        this.bus = bus;
-    }
-
-    @Override
-    public void register(final Witness witness) {
-        this.bus.register(witness);
-    }
+    /**
+     * Sets the amount of slots this handler will operate on while preserving data in range.
+     *
+     * <p>
+     *     Great care must be taken in changing the slot count as setting the value lower than what
+     *     {@link IItemHandler#getSlots()} will result in loss of data when the handler is saved next (if ever).
+     * </p>
+     *
+     * @param slotCount The new slot count
+     */
+    void resize(int slotCount);
 }
