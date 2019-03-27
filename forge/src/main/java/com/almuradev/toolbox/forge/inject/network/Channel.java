@@ -25,14 +25,18 @@
 package com.almuradev.toolbox.forge.inject.network;
 
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.relauncher.Side;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-public interface PacketEntry<IN extends IMessage, OUT extends IMessage> {
+import java.util.function.Consumer;
 
-    default void handler(final Class<? extends IMessageHandler<IN, OUT>> handler, final Side side) {
-        this.handler(handler, side, false);
-    }
+public interface Channel {
+  @NonNull String name();
 
-    void handler(final Class<? extends IMessageHandler<IN, OUT>> handler, final Side side, final boolean strictSide);
+  @NonNull Type type();
+
+  <I extends IMessage, O extends IMessage> @NonNull Channel bind(final @NonNull Class<I> inboundPacket, final @NonNull Consumer<PacketEntry<I, O>> consumer);
+
+  enum Type {
+    INDEXED;
+  }
 }

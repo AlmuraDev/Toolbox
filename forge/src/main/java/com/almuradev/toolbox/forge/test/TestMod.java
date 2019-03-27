@@ -26,12 +26,22 @@ package com.almuradev.toolbox.forge.test;
 
 import com.almuradev.toolbox.forge.ModBootstrap;
 import com.almuradev.toolbox.forge.inject.ModModule;
+import com.almuradev.toolbox.forge.inject.network.Channel;
+import com.almuradev.toolbox.forge.inject.network.ChannelId;
+import com.almuradev.toolbox.forge.inject.network.Indexed;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import io.netty.buffer.ByteBuf;
 import net.kyori.membrane.facet.internal.Facets;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLConstructionEvent;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+
+import javax.inject.Inject;
 
 @Mod(
     modid = Constants.ID,
@@ -48,10 +58,39 @@ public final class TestMod {
 
     private Facets facets;
 
+    @Inject @ChannelId("toolbox:test") @Indexed Channel channel;
+
     @Mod.EventHandler
     public void onConstruction(final FMLConstructionEvent event) {
         final Injector injector = Guice.createInjector(new ModModule(), bootstrap.createModule());
+        injector.injectMembers(this);
+        this.channel.<MyRequest, MyResponse>bind(MyRequest.class, entry -> entry.handler(MyRequestHandler.class, Side.SERVER));
         this.facets = injector.getInstance(Facets.class);
         this.facets.enable();
+    }
+
+    private static class MyRequest implements IMessage {
+        @Override
+        public void fromBytes(final ByteBuf buf) {
+        }
+
+        @Override
+        public void toBytes(final ByteBuf buf) {
+        }
+    }
+    private static class MyResponse implements IMessage {
+        @Override
+        public void fromBytes(final ByteBuf buf) {
+        }
+
+        @Override
+        public void toBytes(final ByteBuf buf) {
+        }
+    }
+    private static class MyRequestHandler implements IMessageHandler<MyRequest, MyResponse> {
+        @Override
+        public MyResponse onMessage(final MyRequest request, final MessageContext context) {
+            return new MyResponse();
+        }
     }
 }

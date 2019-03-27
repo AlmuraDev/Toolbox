@@ -25,15 +25,17 @@
 package com.almuradev.toolbox.forge.inject.network;
 
 import com.almuradev.toolbox.forge.inject.ModToolboxBinder;
-import com.almuradev.toolbox.forge.inject.network.provider.SimpleNetworkWrapperProvider;
+import net.kyori.membrane.facet.FacetBinder;
 import net.kyori.violet.AbstractModule;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 public final class NetworkModule extends AbstractModule implements ModToolboxBinder {
-
     @Override
     public void configure() {
-        this.bind(SimpleNetworkWrapper.class).annotatedWith(ChannelId.class).toProvider(SimpleNetworkWrapperProvider.class);
-        this.indexedPacket();
+        this.installFactory(ChannelImpl.Factory.class);
+        this.bind(Channels.class).to(ChannelsImpl.class);
+        this.bind(Channel.class).annotatedWith(ChannelId.class).toProvider(ChannelProvider.class);
+
+        final FacetBinder facets = new FacetBinder(this.binder());
+        facets.add().to(ChannelsImpl.class);
     }
 }

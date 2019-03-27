@@ -22,26 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject.network.provider;
+package com.almuradev.toolbox.forge.inject.network;
 
-import com.almuradev.toolbox.forge.inject.ModInjectionPoint;
-import com.almuradev.toolbox.forge.inject.network.ChannelId;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-public final class SimpleNetworkWrapperProvider implements Provider<SimpleNetworkWrapper> {
-
-    private final SimpleNetworkWrapper network;
-
-    @Inject
-    public SimpleNetworkWrapperProvider(final Provider<ModInjectionPoint> point) {
-        this.network = NetworkRegistry.INSTANCE.newSimpleChannel(point.get().getAnnotation(ChannelId.class).value());
-    }
-
-    @Override
-    public SimpleNetworkWrapper get() {
-        return this.network;
-    }
+public interface Channels {
+  @NonNull Channel get(final @NonNull String name, final Channel.@NonNull Type type);
 }
