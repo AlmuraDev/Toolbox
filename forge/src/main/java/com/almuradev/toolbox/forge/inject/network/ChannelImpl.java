@@ -26,6 +26,8 @@ package com.almuradev.toolbox.forge.inject.network;
 
 import com.google.inject.Injector;
 import com.google.inject.assistedinject.Assisted;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -82,6 +84,48 @@ public class ChannelImpl implements Channel {
                 }
             });
         });
+        return this;
+    }
+
+    @Override
+    public Channel sendToAll(@NonNull IMessage message) {
+        this.indexed.sendToAll(message);
+        return this;
+    }
+
+    @Override
+    public Channel sendTo(@NonNull IMessage message, @NonNull EntityPlayerMP player) {
+        this.indexed.sendTo(message, player);
+        return this;
+    }
+
+    @Override
+    public Channel sendToAllAround(@NonNull IMessage message, NetworkRegistry.TargetPoint point) {
+        this.indexed.sendToAllAround(message, point);
+        return this;
+    }
+
+    @Override
+    public Channel sendToAllTracking(@NonNull IMessage message, NetworkRegistry.TargetPoint point) {
+        this.indexed.sendToAllTracking(message, point);
+        return this;
+    }
+
+    @Override
+    public Channel sendToAllTracking(@NonNull IMessage message, @NonNull Entity entity) {
+        this.indexed.sendToAllTracking(message, entity);
+        return this;
+    }
+
+    @Override
+    public Channel sendToDimension(@NonNull IMessage message, int dimensionId) {
+        this.indexed.sendToDimension(message, dimensionId);
+        return this;
+    }
+
+    @Override
+    public Channel sendToServer(@NonNull IMessage message) {
+        this.indexed.sendToServer(message);
         return this;
     }
 

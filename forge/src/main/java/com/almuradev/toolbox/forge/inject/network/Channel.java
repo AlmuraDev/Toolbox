@@ -24,6 +24,9 @@
  */
 package com.almuradev.toolbox.forge.inject.network;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -37,6 +40,20 @@ public interface Channel {
 
     <I extends IMessage, O extends IMessage> @NonNull Channel bind(final @NonNull Class<I> inboundPacket,
         final @NonNull Consumer<PacketEntry<I, O>> consumer);
+
+    Channel sendToAll(@NonNull IMessage message);
+
+    Channel sendTo(@NonNull IMessage message, @NonNull EntityPlayerMP player);
+
+    Channel sendToAllAround(@NonNull IMessage message, NetworkRegistry.TargetPoint point);
+
+    Channel sendToAllTracking(@NonNull IMessage message, NetworkRegistry.TargetPoint point);
+
+    Channel sendToAllTracking(@NonNull IMessage message, @NonNull Entity entity);
+
+    Channel sendToDimension(@NonNull IMessage message, int dimensionId);
+
+    Channel sendToServer(@NonNull IMessage message);
 
     enum Type {
         INDEXED
