@@ -32,9 +32,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 
-import javax.annotation.concurrent.Immutable;
-
 import static com.google.common.base.Preconditions.checkState;
+
+import javax.annotation.concurrent.Immutable;
 
 @Immutable
 public final class IntRange {

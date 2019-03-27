@@ -22,37 +22,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.sponge.event;
+package com.almuradev.toolbox.forge.test;
 
-import com.almuradev.toolbox.event.Witness;
-import org.spongepowered.api.GameState;
+import com.google.inject.Injector;
 
-import java.util.function.Predicate;
+public abstract class CommonBootstrap {
 
-/**
- * A witness whose activation depends on a game lifecycle state.
- */
-public interface LifecycleWitness extends Witness {
-  /**
-   * Tests if this witness is subscribable.
-   *
-   * @param state the game state
-   * @return {@code true} if this witness is subscribable
-   */
-  boolean lifecycleSubscribable(final GameState state);
+    protected final void construct(final Injector injector) {
+        this.createInjector(injector);
+    }
 
-  @Override
-  default boolean subscribable() {
-    return false; // default by false
-  }
-
-  /**
-   * Creates a predicate which may be used to check if a lifecycle witness is subscribable.
-   *
-   * @param state the game state
-   * @return the predicate
-   */
-  static Predicate<LifecycleWitness> predicate(final GameState state) {
-    return Witness.<LifecycleWitness>predicate().and(witness -> witness.lifecycleSubscribable(state));
-  }
+    protected abstract Injector createInjector(final Injector parent);
 }

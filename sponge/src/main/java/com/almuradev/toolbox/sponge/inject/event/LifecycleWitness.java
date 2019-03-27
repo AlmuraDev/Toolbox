@@ -22,34 +22,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.forge.inject;
+package com.almuradev.toolbox.sponge.inject.event;
 
-import com.almuradev.toolbox.forge.inject.event.WitnessModule;
-import com.almuradev.toolbox.forge.inject.network.NetworkModule;
-import net.kyori.violet.AbstractModule;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
-import net.minecraftforge.fml.common.eventhandler.EventBus;
-import net.minecraftforge.fml.relauncher.Side;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.almuradev.toolbox.event.Witness;
+import org.spongepowered.api.GameState;
 
-public final class ModModule extends AbstractModule {
+import java.util.function.Predicate;
 
-    @Override
-    public void configure() {
-        this.bind(Side.class).toInstance(FMLCommonHandler.instance().getSide());
-        this.bind(EventBus.class).toInstance(MinecraftForge.EVENT_BUS);
+/**
+ * A witness whose activation depends on a game lifecycle state.
+ */
+public interface LifecycleWitness extends Witness {
+  /**
+   * Tests if this witness is subscribable.
+   *
+   * @param state the game state
+   * @return {@code true} if this witness is subscribable
+   */
+  boolean lifecycleSubscribable(final GameState state);
 
-        final ModContainer container = Loader.instance().activeModContainer();
-        this.bind(ModContainer.class).toInstance(container);
-        this.bind(Logger.class).toInstance(LogManager.getLogger(container.getModId()));
+  @Override
+  default boolean subscribable() {
+    return false; // default by false
+  }
 
-        this.install(new InjectionPointProvider());
-
-        this.install(new WitnessModule());
-        this.install(new NetworkModule());
-    }
+  /**
+   * Creates a predicate which may be used to check if a lifecycle witness is subscribable.
+   *
+   * @param state the game state
+   * @return the predicate
+   */
+  static Predicate<LifecycleWitness> predicate(final GameState state) {
+    return Witness.<LifecycleWitness>predicate().and(witness -> witness.lifecycleSubscribable(state));
+  }
 }

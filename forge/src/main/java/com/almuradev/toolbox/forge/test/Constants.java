@@ -22,19 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.sponge.event;
+package com.almuradev.toolbox.forge.test;
 
-import com.almuradev.toolbox.event.WitnessRegistrar;
-import com.almuradev.toolbox.event.WitnessScope;
+public final class Constants {
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+    public static final String ID = "test";
+    public static final String NAME = "Test";
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-@WitnessScope(registrar = SpongeWitnessRegistrar.class)
-public @interface SpongeWitnessScope {
-  Class<? extends WitnessRegistrar> registrar();
+    private Constants() {
+    }
 }

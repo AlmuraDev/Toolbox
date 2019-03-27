@@ -44,6 +44,7 @@ subprojects {
     dependencies {
         compile(Deps.configurate)
         compile(Deps.guice)
+        compile(Deps.jsr305)
         compile(Deps.junit)
         compile(Deps.Flow.math)
         compile(Deps.Kyori.lunar)

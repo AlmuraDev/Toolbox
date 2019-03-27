@@ -44,13 +44,13 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-public final class InjectionPointProvider extends AbstractMatcher<Binding<?>> implements Module, ProvisionListener, Provider<ForgeInjectionPoint> {
+public final class InjectionPointProvider extends AbstractMatcher<Binding<?>> implements Module, ProvisionListener, Provider<ModInjectionPoint> {
 
-    @Nullable private ForgeInjectionPoint injectionPoint;
+    @Nullable private ModInjectionPoint injectionPoint;
 
     @Nullable
     @Override
-    public ForgeInjectionPoint get() {
+    public ModInjectionPoint get() {
         return this.injectionPoint;
     }
 
@@ -70,7 +70,7 @@ public final class InjectionPointProvider extends AbstractMatcher<Binding<?>> im
     }
 
     @Nullable
-    private static ForgeInjectionPoint findInjectionPoint(List<DependencyAndSource> dependencyChain) {
+    private static ModInjectionPoint findInjectionPoint(List<DependencyAndSource> dependencyChain) {
         if (dependencyChain.size() < 3) {
             throw new AssertionError("Provider is not included in the dependency chain");
         }
@@ -87,13 +87,13 @@ public final class InjectionPointProvider extends AbstractMatcher<Binding<?>> im
                 final Member member = spiInjectionPoint.getMember();
                 if (member instanceof Field) {
                     final Field field = (Field) member;
-                    return new ForgeInjectionPoint(source, TypeToken.of(field.getGenericType()), field.getAnnotations());
+                    return new ModInjectionPoint(source, TypeToken.of(field.getGenericType()), field.getAnnotations());
                 } else if (member instanceof Executable) {
                     final Executable executable = (Executable) member;
                     final Annotation[][] parameterAnnotations = executable.getParameterAnnotations();
                     final Type[] parameterTypes = executable.getGenericParameterTypes();
                     final int index = dependency.getParameterIndex();
-                    return new ForgeInjectionPoint(source, TypeToken.of(parameterTypes[index]), parameterAnnotations[index]);
+                    return new ModInjectionPoint(source, TypeToken.of(parameterTypes[index]), parameterAnnotations[index]);
                 } else {
                     throw new IllegalStateException("Unsupported Member type: " + member.getClass().getName());
                 }
@@ -105,7 +105,7 @@ public final class InjectionPointProvider extends AbstractMatcher<Binding<?>> im
 
     @Override
     public void configure(Binder binder) {
-        binder.bind(ForgeInjectionPoint.class).toProvider(this);
+        binder.bind(ModInjectionPoint.class).toProvider(this);
         binder.bindListener(this, this);
     }
 }

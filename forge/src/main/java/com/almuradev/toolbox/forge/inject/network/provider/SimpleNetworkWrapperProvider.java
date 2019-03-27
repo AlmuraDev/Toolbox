@@ -24,7 +24,7 @@
  */
 package com.almuradev.toolbox.forge.inject.network.provider;
 
-import com.almuradev.toolbox.forge.inject.ForgeInjectionPoint;
+import com.almuradev.toolbox.forge.inject.ModInjectionPoint;
 import com.almuradev.toolbox.forge.inject.network.ChannelId;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -33,7 +33,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 public final class SimpleNetworkWrapperProvider implements Provider<SimpleNetworkWrapper> {
 
-    @Inject private Provider<ForgeInjectionPoint> point;
+    @Inject private Provider<ModInjectionPoint> point;
 
     private SimpleNetworkWrapper network;
 

@@ -22,41 +22,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.sponge.event;
+package com.almuradev.toolbox.forge.inject.event;
 
 import com.almuradev.toolbox.event.Witness;
 import com.almuradev.toolbox.event.Witnesses;
+import com.almuradev.toolbox.inject.ToolboxBinder;
 import net.kyori.membrane.facet.internal.Facets;
 import net.kyori.violet.AbstractModule;
-import org.spongepowered.api.event.EventManager;
-import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.game.state.GameStateEvent;
-import org.spongepowered.api.plugin.PluginContainer;
+import net.minecraftforge.fml.common.eventhandler.EventBus;
 
 import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
-public final class WitnessModule extends AbstractModule {
-  private @Inject PluginContainer plugin;
-  private @Inject EventManager em;
-  private @Inject Witnesses witnesses;
-  private @Inject Facets facets;
+public final class WitnessModule extends AbstractModule implements ToolboxBinder {
+
+  @Inject private EventBus bus;
+  @Inject private Witnesses witnesses;
+  @Inject private Facets facets;
 
   @Override
   protected void configure() {
+    this.facet();
     this.requestInjection(this);
   }
 
   @Inject
   private void earlyConfigure() {
-    this.em.registerListeners(this.plugin, this);
+    this.bus.register(this);
     this.register(this.facets.of(Witness.class, Witness.predicate()));
-  }
-
-  @Listener
-  public void lifecycleConfigure(final GameStateEvent event) {
-    this.register(this.facets.of(LifecycleWitness.class, LifecycleWitness.predicate(event.getState())));
   }
 
   private void register(final Stream<? extends Witness> stream) {

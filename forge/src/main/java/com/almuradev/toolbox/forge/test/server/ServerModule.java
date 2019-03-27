@@ -22,23 +22,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.almuradev.toolbox.sponge.event;
+package com.almuradev.toolbox.forge.test.server;
 
-import com.almuradev.toolbox.event.Witness;
-import com.almuradev.toolbox.event.WitnessRegistrar;
-import org.spongepowered.api.event.EventManager;
-import org.spongepowered.api.plugin.PluginContainer;
+import com.almuradev.toolbox.forge.test.CommonModule;
+import com.almuradev.toolbox.forge.inject.ModToolboxBinder;
+import net.kyori.violet.AbstractModule;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+public final class ServerModule extends AbstractModule implements ModToolboxBinder {
 
-@Singleton
-public class SpongeWitnessRegistrar implements WitnessRegistrar {
-  private @Inject PluginContainer plugin;
-  private @Inject EventManager em;
-
-  @Override
-  public void register(final Witness witness) {
-    this.em.registerListeners(this.plugin, witness);
-  }
+    @Override
+    protected void configure() {
+        this.install(new CommonModule());
+        this.facet()
+            .add(EventTester.class);
+    }
 }

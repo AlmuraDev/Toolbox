@@ -33,13 +33,13 @@ import java.util.Arrays;
 
 import javax.annotation.Nullable;
 
-public final class ForgeInjectionPoint implements AnnotatedElement {
+public final class ModInjectionPoint implements AnnotatedElement {
 
     private final TypeToken<?> source;
     private final TypeToken<?> type;
     private final Annotation[] annotations;
 
-    ForgeInjectionPoint(TypeToken<?> source, TypeToken<?> type, Annotation[] annotations) {
+    ModInjectionPoint(TypeToken<?> source, TypeToken<?> type, Annotation[] annotations) {
         this.annotations = annotations;
         this.source = source;
         this.type = type;
